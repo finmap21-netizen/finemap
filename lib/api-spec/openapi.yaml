@@ -1,22 +1,41 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: SME Tax & Finance Assistant Algeria API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: company
+    description: Company profile
+  - name: dashboard
+    description: Dashboard summaries
+  - name: penalties
+    description: Penalty calculations
+  - name: calendar
+    description: Tax calendar and deadlines
+  - name: reminders
+    description: Deadline reminders
+  - name: knowledge
+    description: Knowledge base Q&A
+  - name: news
+    description: Tax news and announcements
+  - name: rules
+    description: Tax rules management
+  - name: admin
+    description: Admin operations
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +43,510 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ─── Auth ────────────────────────────────────────────────────────────────────
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Company ─────────────────────────────────────────────────────────────────
+  /company:
+    get:
+      operationId: getCompany
+      tags: [company]
+      summary: Get company profile
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateCompany
+      tags: [company]
+      summary: Create or update company profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCompanyBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+
+  # ─── Dashboard ───────────────────────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary stats
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  # ─── Penalties ────────────────────────────────────────────────────────────────
+  /penalties/calculate:
+    post:
+      operationId: calculatePenalty
+      tags: [penalties]
+      summary: Calculate penalty for a late declaration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PenaltyCalculateBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PenaltyResult"
+
+  /penalties:
+    get:
+      operationId: listPenalties
+      tags: [penalties]
+      summary: List penalty history for current user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Penalty"
+
+  # ─── Calendar ────────────────────────────────────────────────────────────────
+  /calendar/events:
+    get:
+      operationId: listCalendarEvents
+      tags: [calendar]
+      summary: List all tax calendar events for the user's regime
+      parameters:
+        - name: year
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: month
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CalendarEvent"
+
+  /calendar/upcoming:
+    get:
+      operationId: listUpcomingDeadlines
+      tags: [calendar]
+      summary: Get upcoming deadlines in the next 30 days
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CalendarEvent"
+
+  # ─── Reminders ───────────────────────────────────────────────────────────────
+  /reminders:
+    get:
+      operationId: listReminders
+      tags: [reminders]
+      summary: List active reminders for current user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reminder"
+
+  /reminders/{id}/acknowledge:
+    patch:
+      operationId: acknowledgeReminder
+      tags: [reminders]
+      summary: Acknowledge a reminder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reminder"
+
+  # ─── Knowledge Base ──────────────────────────────────────────────────────────
+  /knowledge:
+    get:
+      operationId: listKnowledgeItems
+      tags: [knowledge]
+      summary: List knowledge base items
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: regime
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/KnowledgeItem"
+
+  /knowledge/{id}:
+    get:
+      operationId: getKnowledgeItem
+      tags: [knowledge]
+      summary: Get a knowledge base item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeItem"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── News ────────────────────────────────────────────────────────────────────
+  /news:
+    get:
+      operationId: listNews
+      tags: [news]
+      summary: List news and announcements
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NewsItem"
+    post:
+      operationId: createNews
+      tags: [news]
+      summary: Create a news item (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNewsBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsItem"
+
+  /news/{id}:
+    patch:
+      operationId: updateNews
+      tags: [news]
+      summary: Update a news item (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNewsBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsItem"
+    delete:
+      operationId: deleteNews
+      tags: [news]
+      summary: Delete a news item (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: No content
+
+  # ─── Tax Rules ───────────────────────────────────────────────────────────────
+  /rules:
+    get:
+      operationId: listRules
+      tags: [rules]
+      summary: List tax rules
+      parameters:
+        - name: regime
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: declarationType
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaxRule"
+
+  /rules/{id}:
+    get:
+      operationId: getRule
+      tags: [rules]
+      summary: Get a tax rule
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaxRule"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateRule
+      tags: [rules]
+      summary: Update a tax rule (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRuleBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaxRule"
+
+  # ─── Admin ───────────────────────────────────────────────────────────────────
+  /admin/users:
+    get:
+      operationId: listAdminUsers
+      tags: [admin]
+      summary: List all users (admin only)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+  /admin/users/{id}:
+    patch:
+      operationId: updateAdminUser
+      tags: [admin]
+      summary: Update user role or status (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAdminUserBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /admin/stats:
+    get:
+      operationId: getAdminStats
+      tags: [admin]
+      summary: Get platform-wide stats (admin only)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +554,432 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]
+
+    # ─── Auth ──────────────────────────────────────────────────────────────────
+    RegisterBody:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required: [name, email, password]
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required: [email, password]
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        token:
+          type: string
+      required: [user, token]
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+      required: [id, name, email, role, isActive, createdAt]
+
+    # ─── Company ───────────────────────────────────────────────────────────────
+    UpdateCompanyBody:
+      type: object
+      properties:
+        companyName:
+          type: string
+        activityType:
+          type: string
+          enum: [commerce, services, production, auto_entrepreneur]
+        annualRevenue:
+          type: ["number", "null"]
+        employeeCount:
+          type: ["integer", "null"]
+        taxRegime:
+          type: string
+          enum: [real, simplified_real, forfaitaire]
+        hasCnas:
+          type: boolean
+      required: [companyName, activityType, taxRegime]
+
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        companyName:
+          type: string
+        activityType:
+          type: string
+        annualRevenue:
+          type: ["number", "null"]
+        employeeCount:
+          type: ["integer", "null"]
+        taxRegime:
+          type: string
+        hasCnas:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, userId, companyName, activityType, taxRegime, hasCnas, createdAt, updatedAt]
+
+    # ─── Dashboard ─────────────────────────────────────────────────────────────
+    DashboardSummary:
+      type: object
+      properties:
+        upcomingDeadlines:
+          type: integer
+        overdueCount:
+          type: integer
+        nextDeadline:
+          $ref: "#/components/schemas/CalendarEvent"
+        totalPenaltyRisk:
+          type: number
+        acknowledgedReminders:
+          type: integer
+        pendingReminders:
+          type: integer
+        regimeLabel:
+          type: string
+        recentNews:
+          type: array
+          items:
+            $ref: "#/components/schemas/NewsItem"
+      required: [upcomingDeadlines, overdueCount, totalPenaltyRisk, acknowledgedReminders, pendingReminders, regimeLabel, recentNews]
+
+    # ─── Penalties ─────────────────────────────────────────────────────────────
+    PenaltyCalculateBody:
+      type: object
+      properties:
+        declarationType:
+          type: string
+          description: "e.g. G50, G12, G12BIS, CNAS, IBS, IRG"
+        regime:
+          type: string
+          enum: [real, simplified_real, forfaitaire]
+        dueDate:
+          type: string
+          description: ISO date string of the legal deadline
+        paymentDate:
+          type: string
+          description: ISO date string of actual payment
+        taxAmount:
+          type: number
+          description: Amount of tax owed (DZD). 0 if no rights.
+        hasPaymentRights:
+          type: boolean
+          description: Whether there are payment rights (droits de paiement)
+      required: [declarationType, regime, dueDate, paymentDate, taxAmount, hasPaymentRights]
+
+    PenaltyResult:
+      type: object
+      properties:
+        delayMonths:
+          type: integer
+        penaltyRate:
+          type: number
+        penaltyAmount:
+          type: number
+        fixedFine:
+          type: ["number", "null"]
+        totalDue:
+          type: number
+        breakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/PenaltyBreakdownItem"
+        message:
+          type: string
+        declarationType:
+          type: string
+        regime:
+          type: string
+      required: [delayMonths, penaltyRate, penaltyAmount, totalDue, breakdown, message, declarationType, regime]
+
+    PenaltyBreakdownItem:
+      type: object
+      properties:
+        label:
+          type: string
+        rate:
+          type: ["number", "null"]
+        amount:
+          type: number
+      required: [label, amount]
+
+    Penalty:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        declarationType:
+          type: string
+        regime:
+          type: string
+        dueDate:
+          type: string
+        paymentDate:
+          type: string
+        taxAmount:
+          type: number
+        penaltyRate:
+          type: number
+        penaltyAmount:
+          type: number
+        totalDue:
+          type: number
+        createdAt:
+          type: string
+      required: [id, userId, declarationType, regime, dueDate, paymentDate, taxAmount, penaltyRate, penaltyAmount, totalDue, createdAt]
+
+    # ─── Calendar ──────────────────────────────────────────────────────────────
+    CalendarEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+        declarationType:
+          type: string
+          description: "G50, G12, G12BIS, CNAS, IRG, IBS, G51, G4"
+        regime:
+          type: string
+        title:
+          type: string
+        titleAr:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+        daysUntilDue:
+          type: integer
+        status:
+          type: string
+          enum: [upcoming, due_today, overdue, completed]
+        urgencyLevel:
+          type: string
+          enum: [normal, warning, critical, overdue]
+      required: [id, declarationType, regime, title, titleAr, dueDate, daysUntilDue, status, urgencyLevel]
+
+    # ─── Reminders ─────────────────────────────────────────────────────────────
+    Reminder:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        calendarEventId:
+          type: integer
+        reminderType:
+          type: string
+          enum: [seven_days, three_days, one_day, due_day, overdue]
+        message:
+          type: string
+        messageAr:
+          type: string
+        isAcknowledged:
+          type: boolean
+        scheduledFor:
+          type: string
+        createdAt:
+          type: string
+        event:
+          $ref: "#/components/schemas/CalendarEvent"
+      required: [id, userId, calendarEventId, reminderType, message, messageAr, isAcknowledged, scheduledFor, createdAt, event]
+
+    # ─── Knowledge Base ────────────────────────────────────────────────────────
+    KnowledgeItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        question:
+          type: string
+        questionAr:
+          type: string
+        answer:
+          type: string
+        answerAr:
+          type: string
+        tip:
+          type: ["string", "null"]
+        tipAr:
+          type: ["string", "null"]
+        category:
+          type: string
+        regime:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required: [id, question, questionAr, answer, answerAr, category, createdAt]
+
+    # ─── News ──────────────────────────────────────────────────────────────────
+    NewsItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        titleAr:
+          type: string
+        content:
+          type: string
+        contentAr:
+          type: string
+        category:
+          type: string
+        publishedAt:
+          type: string
+        createdAt:
+          type: string
+      required: [id, title, titleAr, content, contentAr, category, publishedAt, createdAt]
+
+    CreateNewsBody:
+      type: object
+      properties:
+        title:
+          type: string
+        titleAr:
+          type: string
+        content:
+          type: string
+        contentAr:
+          type: string
+        category:
+          type: string
+        publishedAt:
+          type: string
+      required: [title, titleAr, content, contentAr, category]
+
+    # ─── Tax Rules ─────────────────────────────────────────────────────────────
+    TaxRule:
+      type: object
+      properties:
+        id:
+          type: integer
+        regime:
+          type: string
+        declarationType:
+          type: string
+        legalDeadlineDescription:
+          type: string
+        legalDeadlineDescriptionAr:
+          type: string
+        penaltySchedule:
+          type: string
+          description: JSON string of penalty schedule
+        fixedFine:
+          type: ["number", "null"]
+        notes:
+          type: ["string", "null"]
+        notesAr:
+          type: ["string", "null"]
+        sourceDocument:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, regime, declarationType, legalDeadlineDescription, legalDeadlineDescriptionAr, penaltySchedule, isActive, createdAt, updatedAt]
+
+    UpdateRuleBody:
+      type: object
+      properties:
+        legalDeadlineDescription:
+          type: string
+        legalDeadlineDescriptionAr:
+          type: string
+        penaltySchedule:
+          type: string
+        fixedFine:
+          type: ["number", "null"]
+        notes:
+          type: ["string", "null"]
+        notesAr:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+
+    # ─── Admin ─────────────────────────────────────────────────────────────────
+    UpdateAdminUserBody:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, admin]
+        isActive:
+          type: boolean
+
+    AdminStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        activeUsers:
+          type: integer
+        totalRules:
+          type: integer
+        totalKnowledgeItems:
+          type: integer
+        totalNewsItems:
+          type: integer
+        usersByRegime:
+          type: array
+          items:
+            $ref: "#/components/schemas/RegimeCount"
+      required: [totalUsers, activeUsers, totalRules, totalKnowledgeItems, totalNewsItems, usersByRegime]
+
+    RegimeCount:
+      type: object
+      properties:
+        regime:
+          type: string
+        count:
+          type: integer
+      required: [regime, count]

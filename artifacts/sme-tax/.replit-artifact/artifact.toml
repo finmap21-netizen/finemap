@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Tax & Finance Assistant Algeria"
+version = "1.0.0"
+id = "artifacts/sme-tax"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22912
+
+[services.development]
+run = "pnpm --filter @workspace/sme-tax run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sme-tax", "run", "build" ]
+publicDir = "artifacts/sme-tax/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22912"
+BASE_PATH = "/"
