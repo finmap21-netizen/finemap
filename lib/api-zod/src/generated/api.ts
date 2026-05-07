@@ -544,6 +544,13 @@ export const UpdateAdminUserResponse = zod.object({
 });
 
 /**
+ * @summary Delete a user (admin only)
+ */
+export const DeleteAdminUserParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+/**
  * @summary Get platform-wide stats (admin only)
  */
 export const GetAdminStatsResponse = zod.object({

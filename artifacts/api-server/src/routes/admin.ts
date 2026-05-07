@@ -27,6 +27,17 @@ router.patch("/admin/users/:id", requireAdmin, async (req, res): Promise<void> =
   res.json({ id: user.id, name: user.name, email: user.email, role: user.role, isActive: user.isActive, createdAt: user.createdAt.toISOString() });
 });
 
+router.delete("/admin/users/:id", requireAdmin, async (req: AuthenticatedRequest, res): Promise<void> => {
+  const rawId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  const id = parseInt(rawId, 10);
+  if (id === req.userId) {
+    res.status(400).json({ error: "لا يمكنك حذف حسابك الخاص" });
+    return;
+  }
+  await db.delete(usersTable).where(eq(usersTable.id, id));
+  res.sendStatus(204);
+});
+
 router.get("/admin/stats", requireAdmin, async (_req, res): Promise<void> => {
   const users = await db.select().from(usersTable);
   const rules = await db.select().from(taxRulesTable);
