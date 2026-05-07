@@ -1,26 +1,48 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Sidebar } from "./Sidebar";
-import { useGetMe } from "@workspace/api-client-react";
-import { isAuthenticated } from "@/lib/auth";
+import { useGetMe, getGetMeQueryKey } from "@workspace/api-client-react";
+import { isAuthenticated, removeToken } from "@/lib/auth";
 import { useLocation } from "wouter";
 
 export function Layout({ children }: { children: ReactNode }) {
-  const { data: user, isLoading } = useGetMe({ query: { enabled: isAuthenticated() } });
   const [location, setLocation] = useLocation();
+  const authenticated = isAuthenticated();
 
-  if (!isAuthenticated() && location !== "/login" && location !== "/register") {
+  const { data: user, isLoading, isError } = useGetMe({
+    query: {
+      enabled: authenticated,
+      queryKey: getGetMeQueryKey(),
+      retry: false,
+    },
+  });
+
+  useEffect(() => {
+    if (isError && authenticated) {
+      removeToken();
+      setLocation("/login");
+    }
+  }, [isError, authenticated, setLocation]);
+
+  const isAuthPage = location === "/login" || location === "/register";
+
+  if (!authenticated && !isAuthPage) {
     setLocation("/login");
     return null;
   }
 
-  if (isLoading && isAuthenticated()) {
-    return <div className="flex h-screen items-center justify-center">جاري التحميل...</div>;
-  }
-
-  const isAuthPage = location === "/login" || location === "/register";
-
   if (isAuthPage) {
     return <div className="min-h-screen bg-background">{children}</div>;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background" dir="rtl">
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-muted-foreground text-sm">جاري التحميل...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
