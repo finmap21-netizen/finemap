@@ -15,6 +15,11 @@ import Knowledge from "@/pages/Knowledge";
 import News from "@/pages/News";
 import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
+import InvoiceRequests from "@/pages/InvoiceRequests";
+import { ChatBot } from "@/components/ChatBot";
+import { OnboardingModal } from "@/components/OnboardingModal";
+import { FinancialTips } from "@/components/FinancialTips";
+import { isAuthenticated } from "@/lib/auth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +31,10 @@ const queryClient = new QueryClient({
 });
 
 function Router() {
+  const [location] = useLocation();
+  const authenticated = isAuthenticated();
+  const isApp = authenticated && location !== "/" && location !== "/login" && location !== "/register";
+
   return (
     <Layout>
       <Switch>
@@ -40,8 +49,17 @@ function Router() {
         <Route path="/news" component={News} />
         <Route path="/profile" component={Profile} />
         <Route path="/admin" component={Admin} />
+        <Route path="/invoice-requests" component={InvoiceRequests} />
         <Route component={NotFound} />
       </Switch>
+
+      {isApp && (
+        <>
+          <ChatBot />
+          <OnboardingModal />
+          <FinancialTips />
+        </>
+      )}
     </Layout>
   );
 }

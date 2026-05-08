@@ -231,6 +231,61 @@ export interface Reminder {
   event: CalendarEvent;
 }
 
+export interface CreateInvoiceRequestBody {
+  firstName: string;
+  lastName: string;
+  activityDescription: string;
+  annualRevenue: number;
+  amountDue: number;
+  tvaRate: number;
+}
+
+export type ProcessInvoiceRequestBodyStatus =
+  (typeof ProcessInvoiceRequestBodyStatus)[keyof typeof ProcessInvoiceRequestBodyStatus];
+
+export const ProcessInvoiceRequestBodyStatus = {
+  pending: "pending",
+  processing: "processing",
+  completed: "completed",
+  rejected: "rejected",
+} as const;
+
+export interface ProcessInvoiceRequestBody {
+  status?: ProcessInvoiceRequestBodyStatus;
+  /** @nullable */
+  adminNotes?: string | null;
+}
+
+export interface InvoiceRequest {
+  id: number;
+  userId: number;
+  firstName: string;
+  lastName: string;
+  activityDescription: string;
+  annualRevenue: number;
+  amountDue: number;
+  tvaRate: number;
+  status: string;
+  /** @nullable */
+  adminNotes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateKnowledgeBody {
+  question: string;
+  questionAr: string;
+  answer: string;
+  answerAr: string;
+  /** @nullable */
+  tip?: string | null;
+  /** @nullable */
+  tipAr?: string | null;
+  category: string;
+  /** @nullable */
+  regime?: string | null;
+}
+
 export interface KnowledgeItem {
   id: number;
   question: string;
@@ -288,6 +343,39 @@ export interface UpdateRuleBody {
   /** @nullable */
   notesAr?: string | null;
   isActive?: boolean;
+}
+
+export interface AnthropicConversation {
+  id: number;
+  title: string;
+  createdAt: string;
+}
+
+export interface AnthropicMessage {
+  id: number;
+  conversationId: number;
+  role: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface CreateAnthropicConversationBody {
+  title: string;
+}
+
+export interface SendAnthropicMessageBody {
+  content: string;
+}
+
+export interface AnthropicConversationWithMessages {
+  id: number;
+  title: string;
+  createdAt: string;
+  messages: AnthropicMessage[];
+}
+
+export interface AnthropicError {
+  error: string;
 }
 
 export type UpdateAdminUserBodyRole =

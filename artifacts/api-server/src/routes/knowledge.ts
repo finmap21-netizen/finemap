@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { db, knowledgeTable } from "@workspace/db";
-import { eq, ilike, or } from "drizzle-orm";
-import { requireAuth } from "../lib/auth";
-import { ListKnowledgeItemsQueryParams } from "@workspace/api-zod";
+import { eq } from "drizzle-orm";
+import { requireAuth, requireAdmin } from "../lib/auth";
+import { ListKnowledgeItemsQueryParams, CreateKnowledgeItemBody, UpdateKnowledgeItemBody } from "@workspace/api-zod";
 
 const router = Router();
 
@@ -36,6 +36,28 @@ router.get("/knowledge/:id", requireAuth, async (req, res): Promise<void> => {
     return;
   }
   res.json({ ...item, createdAt: item.createdAt.toISOString() });
+});
+
+router.post("/knowledge", requireAdmin, async (req, res): Promise<void> => {
+  const parsed = CreateKnowledgeItemBody.safeParse(req.body);
+  if (!parsed.success) { res.status(400).json({ error: parsed.error.message }); return; }
+  const [item] = await db.insert(knowledgeTable).values(parsed.data).returning();
+  res.status(201).json({ ...item, createdAt: item.createdAt.toISOString() });
+});
+
+router.patch("/knowledge/:id", requireAdmin, async (req, res): Promise<void> => {
+  const id = parseInt(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id, 10);
+  const parsed = UpdateKnowledgeItemBody.safeParse(req.body);
+  if (!parsed.success) { res.status(400).json({ error: parsed.error.message }); return; }
+  const [item] = await db.update(knowledgeTable).set(parsed.data).where(eq(knowledgeTable.id, id)).returning();
+  if (!item) { res.status(404).json({ error: "العنصر غير موجود" }); return; }
+  res.json({ ...item, createdAt: item.createdAt.toISOString() });
+});
+
+router.delete("/knowledge/:id", requireAdmin, async (req, res): Promise<void> => {
+  const id = parseInt(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id, 10);
+  await db.delete(knowledgeTable).where(eq(knowledgeTable.id, id));
+  res.sendStatus(204);
 });
 
 export default router;

@@ -5,3 +5,6 @@ export * from "./penalties";
 export * from "./knowledge";
 export * from "./news";
 export * from "./reminders";
+export * from "./invoice_requests";
+export * from "./conversations";
+export * from "./messages";

@@ -10,6 +10,8 @@ import knowledgeRouter from "./knowledge";
 import newsRouter from "./news";
 import rulesRouter from "./rules";
 import adminRouter from "./admin";
+import invoiceRequestsRouter from "./invoice_requests";
+import anthropicRouter from "./anthropic/index";
 
 const router: IRouter = Router();
 
@@ -24,5 +26,7 @@ router.use(knowledgeRouter);
 router.use(newsRouter);
 router.use(rulesRouter);
 router.use(adminRouter);
+router.use(invoiceRequestsRouter);
+router.use(anthropicRouter);
 
 export default router;

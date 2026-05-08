@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useGetMe, useLogout } from "@workspace/api-client-react";
 import { removeToken } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Calendar, Calculator, Bell, BookOpen, Newspaper, Settings, UserCircle, LogOut } from "lucide-react";
+import { LayoutDashboard, Calendar, Calculator, Bell, BookOpen, Newspaper, Settings, UserCircle, LogOut, FileText } from "lucide-react";
 
 export function Sidebar() {
   const [location] = useLocation();
@@ -23,6 +23,7 @@ export function Sidebar() {
     { href: "/calendar", label: "التقويم الضريبي", icon: Calendar },
     { href: "/penalties", label: "حساب الغرامات", icon: Calculator },
     { href: "/reminders", label: "التذكيرات", icon: Bell },
+    { href: "/invoice-requests", label: "طلبات الفواتير", icon: FileText },
     { href: "/knowledge", label: "قاعدة المعرفة", icon: BookOpen },
     { href: "/news", label: "الأخبار", icon: Newspaper },
     { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
@@ -35,7 +36,7 @@ export function Sidebar() {
   return (
     <div className="flex h-screen w-64 flex-col bg-sidebar text-sidebar-foreground border-l border-sidebar-border">
       <div className="p-6">
-        <h2 className="text-2xl font-bold text-sidebar-primary">مساعد الضرائب</h2>
+        <h2 className="text-2xl font-bold text-sidebar-primary">خريطة المالية</h2>
       </div>
       <nav className="flex-1 space-y-2 px-4">
         {navItems.map((item) => {

@@ -348,6 +348,20 @@ export const ListKnowledgeItemsResponse = zod.array(
 );
 
 /**
+ * @summary Create a new knowledge item (admin only)
+ */
+export const CreateKnowledgeItemBody = zod.object({
+  question: zod.string(),
+  questionAr: zod.string(),
+  answer: zod.string(),
+  answerAr: zod.string(),
+  tip: zod.string().nullish(),
+  tipAr: zod.string().nullish(),
+  category: zod.string(),
+  regime: zod.string().nullish(),
+});
+
+/**
  * @summary Get a knowledge base item
  */
 export const GetKnowledgeItemParams = zod.object({
@@ -365,6 +379,44 @@ export const GetKnowledgeItemResponse = zod.object({
   category: zod.string(),
   regime: zod.string().nullish(),
   createdAt: zod.string(),
+});
+
+/**
+ * @summary Update a knowledge item (admin only)
+ */
+export const UpdateKnowledgeItemParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateKnowledgeItemBody = zod.object({
+  question: zod.string(),
+  questionAr: zod.string(),
+  answer: zod.string(),
+  answerAr: zod.string(),
+  tip: zod.string().nullish(),
+  tipAr: zod.string().nullish(),
+  category: zod.string(),
+  regime: zod.string().nullish(),
+});
+
+export const UpdateKnowledgeItemResponse = zod.object({
+  id: zod.number(),
+  question: zod.string(),
+  questionAr: zod.string(),
+  answer: zod.string(),
+  answerAr: zod.string(),
+  tip: zod.string().nullish(),
+  tipAr: zod.string().nullish(),
+  category: zod.string(),
+  regime: zod.string().nullish(),
+  createdAt: zod.string(),
+});
+
+/**
+ * @summary Delete a knowledge item (admin only)
+ */
+export const DeleteKnowledgeItemParams = zod.object({
+  id: zod.coerce.number(),
 });
 
 /**
@@ -507,6 +559,166 @@ export const UpdateRuleResponse = zod.object({
   isActive: zod.boolean(),
   createdAt: zod.string(),
   updatedAt: zod.string(),
+});
+
+/**
+ * @summary List current user's invoice requests
+ */
+export const ListInvoiceRequestsResponseItem = zod.object({
+  id: zod.number(),
+  userId: zod.number(),
+  firstName: zod.string(),
+  lastName: zod.string(),
+  activityDescription: zod.string(),
+  annualRevenue: zod.number(),
+  amountDue: zod.number(),
+  tvaRate: zod.number(),
+  status: zod.string(),
+  adminNotes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListInvoiceRequestsResponse = zod.array(
+  ListInvoiceRequestsResponseItem,
+);
+
+/**
+ * @summary Submit an invoice calculation request
+ */
+export const CreateInvoiceRequestBody = zod.object({
+  firstName: zod.string(),
+  lastName: zod.string(),
+  activityDescription: zod.string(),
+  annualRevenue: zod.number(),
+  amountDue: zod.number(),
+  tvaRate: zod.number(),
+});
+
+/**
+ * @summary List all invoice requests (admin only)
+ */
+export const ListAdminInvoiceRequestsResponseItem = zod.object({
+  id: zod.number(),
+  userId: zod.number(),
+  firstName: zod.string(),
+  lastName: zod.string(),
+  activityDescription: zod.string(),
+  annualRevenue: zod.number(),
+  amountDue: zod.number(),
+  tvaRate: zod.number(),
+  status: zod.string(),
+  adminNotes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+export const ListAdminInvoiceRequestsResponse = zod.array(
+  ListAdminInvoiceRequestsResponseItem,
+);
+
+/**
+ * @summary Process an invoice request and add admin notes (admin only)
+ */
+export const ProcessInvoiceRequestParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const ProcessInvoiceRequestBody = zod.object({
+  status: zod
+    .enum(["pending", "processing", "completed", "rejected"])
+    .optional(),
+  adminNotes: zod.string().nullish(),
+});
+
+export const ProcessInvoiceRequestResponse = zod.object({
+  id: zod.number(),
+  userId: zod.number(),
+  firstName: zod.string(),
+  lastName: zod.string(),
+  activityDescription: zod.string(),
+  annualRevenue: zod.number(),
+  amountDue: zod.number(),
+  tvaRate: zod.number(),
+  status: zod.string(),
+  adminNotes: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary List all conversations
+ */
+export const ListAnthropicConversationsResponseItem = zod.object({
+  id: zod.number(),
+  title: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListAnthropicConversationsResponse = zod.array(
+  ListAnthropicConversationsResponseItem,
+);
+
+/**
+ * @summary Create a new conversation
+ */
+export const CreateAnthropicConversationBody = zod.object({
+  title: zod.string(),
+});
+
+/**
+ * @summary Get conversation with messages
+ */
+export const GetAnthropicConversationParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetAnthropicConversationResponse = zod.object({
+  id: zod.number(),
+  title: zod.string(),
+  createdAt: zod.coerce.date(),
+  messages: zod.array(
+    zod.object({
+      id: zod.number(),
+      conversationId: zod.number(),
+      role: zod.string(),
+      content: zod.string(),
+      createdAt: zod.coerce.date(),
+    }),
+  ),
+});
+
+/**
+ * @summary Delete a conversation
+ */
+export const DeleteAnthropicConversationParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary List messages in a conversation
+ */
+export const ListAnthropicMessagesParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const ListAnthropicMessagesResponseItem = zod.object({
+  id: zod.number(),
+  conversationId: zod.number(),
+  role: zod.string(),
+  content: zod.string(),
+  createdAt: zod.coerce.date(),
+});
+export const ListAnthropicMessagesResponse = zod.array(
+  ListAnthropicMessagesResponseItem,
+);
+
+/**
+ * @summary Send a message and receive an AI response (SSE stream)
+ */
+export const SendAnthropicMessageParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const SendAnthropicMessageBody = zod.object({
+  content: zod.string(),
 });
 
 /**
