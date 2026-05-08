@@ -24,6 +24,11 @@ export function Layout({ children }: { children: ReactNode }) {
   }, [isError, authenticated, setLocation]);
 
   const isAuthPage = location === "/login" || location === "/register";
+  const isLandingPage = location === "/";
+
+  if (isLandingPage) {
+    return <>{children}</>;
+  }
 
   if (!authenticated && !isAuthPage) {
     setLocation("/login");

@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import { Layout } from "@/components/Layout";
+import LandingPage from "@/pages/LandingPage";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
@@ -14,8 +15,6 @@ import Knowledge from "@/pages/Knowledge";
 import News from "@/pages/News";
 import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
-import { useEffect } from "react";
-import { isAuthenticated } from "@/lib/auth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,23 +25,11 @@ const queryClient = new QueryClient({
   },
 });
 
-function RedirectHome() {
-  const [, setLocation] = useLocation();
-  useEffect(() => {
-    if (isAuthenticated()) {
-      setLocation("/dashboard");
-    } else {
-      setLocation("/login");
-    }
-  }, [setLocation]);
-  return null;
-}
-
 function Router() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={RedirectHome} />
+        <Route path="/" component={LandingPage} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/dashboard" component={Dashboard} />
