@@ -78,6 +78,10 @@ router.post("/anthropic/conversations/:id/messages", requireAuth, async (req: Au
   const chatMessages = history.map(m => ({ role: m.role as "user" | "assistant", content: m.content }));
 
   try {
+    if (!anthropic) {
+      res.status(503).json({ error: "AI features are currently disabled. Please configure your Anthropic API keys." });
+      return;
+    }
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 8192,
