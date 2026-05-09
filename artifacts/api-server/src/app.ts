@@ -31,7 +31,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-const frontendPath = path.join(process.cwd(), "artifacts/sme-tax/dist");
+const frontendPath = path.resolve(__dirname, "../../sme-tax/dist");
+console.log("Serving frontend from:", frontendPath);
+
+if (!path.isAbsolute(frontendPath)) {
+  console.error("Frontend path is not absolute!");
+}
+
 app.use(express.static(frontendPath));
 
 app.use("/api", router);
@@ -39,7 +45,8 @@ app.use("/api", router);
 // Handle client-side routing
 app.get("/*all", (req, res) => {
   if (req.path.startsWith("/api") || req.path.includes(".")) return;
-  res.sendFile(path.join(frontendPath, "index.html"));
+  const indexPath = path.join(frontendPath, "index.html");
+  res.sendFile(indexPath);
 });
 
 export default app;
