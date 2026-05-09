@@ -31,6 +31,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
+app.get("/", (req, res) => {
+  res.json({ message: "Tax Assistant AI API is running", version: "1.0.0" });
+});
+
 app.use("/api", router);
 
 export default app;
