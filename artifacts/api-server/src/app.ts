@@ -31,10 +31,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-app.get("/", (req, res) => {
-  res.json({ message: "Tax Assistant AI API is running", version: "1.0.0" });
-});
+const frontendPath = path.join(__dirname, "../../sme-tax/dist");
+app.use(express.static(frontendPath));
 
 app.use("/api", router);
+
+// Handle client-side routing
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api")) return;
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
 
 export default app;
