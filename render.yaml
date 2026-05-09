@@ -7,3 +7,6 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 24.14.1
+      - key: PNPM_VERSION
+        value: 10.28.2
+
