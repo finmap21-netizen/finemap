@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: tax-assistant-api
+    env: node
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_VERSION
+        value: 24.14.1
