@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-const frontendPath = path.join(__dirname, "../../sme-tax/dist");
+const frontendPath = path.join(process.cwd(), "artifacts/sme-tax/dist");
 app.use(express.static(frontendPath));
 
 app.use("/api", router);
