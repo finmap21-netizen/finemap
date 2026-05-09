@@ -10,4 +10,3 @@ services:
       - key: PNPM_VERSION
         value: 10.28.2
 
-

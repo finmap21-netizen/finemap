@@ -37,7 +37,7 @@ app.use(express.static(frontendPath));
 app.use("/api", router);
 
 // Handle client-side routing
-app.get("*", (req, res) => {
+app.get("/*all", (req, res) => {
   if (req.path.startsWith("/api")) return;
   res.sendFile(path.join(frontendPath, "index.html"));
 });
