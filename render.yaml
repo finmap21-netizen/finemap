@@ -3,7 +3,7 @@ services:
     name: tax-assistant-api
     env: node
     buildCommand: pnpm install && pnpm --filter sme-tax run build && pnpm --filter api-server run build
-    startCommand: pnpm start
+    startCommand: pnpm --filter api-server run start
     envVars:
       - key: NODE_VERSION
         value: 24.14.1
