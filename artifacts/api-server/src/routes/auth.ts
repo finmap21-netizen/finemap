@@ -33,26 +33,34 @@ router.post("/auth/register", async (req, res): Promise<void> => {
 });
 
 router.post("/auth/login", async (req, res): Promise<void> => {
-  const parsed = LoginBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.message });
-    return;
+  try {
+    const parsed = LoginBody.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.message });
+      return;
+    }
+    const { email, password } = parsed.data;
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email));
+    
+    if (!user || !verifyPassword(password, user.passwordHash)) {
+      res.status(401).json({ error: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });
+      return;
+    }
+    
+    if (!user.isActive) {
+      res.status(401).json({ error: "الحساب غير نشط" });
+      return;
+    }
+    
+    const token = generateToken(user.id, user.role);
+    res.json({
+      user: { id: user.id, name: user.name, email: user.email, role: user.role, isActive: user.isActive, createdAt: user.createdAt.toISOString() },
+      token,
+    });
+  } catch (error) {
+    logger.error({ error, body: req.body }, "Login crash");
+    res.status(500).json({ error: "حدث خطأ داخلي في الخادم. يرجى التحقق من السجلات." });
   }
-  const { email, password } = parsed.data;
-  const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email));
-  if (!user || !verifyPassword(password, user.passwordHash)) {
-    res.status(401).json({ error: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });
-    return;
-  }
-  if (!user.isActive) {
-    res.status(401).json({ error: "الحساب غير نشط" });
-    return;
-  }
-  const token = generateToken(user.id, user.role);
-  res.json({
-    user: { id: user.id, name: user.name, email: user.email, role: user.role, isActive: user.isActive, createdAt: user.createdAt.toISOString() },
-    token,
-  });
 });
 
 router.post("/auth/logout", async (_req, res): Promise<void> => {
