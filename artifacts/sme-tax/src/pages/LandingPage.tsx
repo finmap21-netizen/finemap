@@ -363,7 +363,7 @@ export default function LandingPage() {
             >
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: BLUE_LIGHT, display: "inline-block" }} />
               <span style={{ fontSize: "0.82rem", fontWeight: 700, color: BLUE }}>
-                المساعد الضريبي الأول للمؤسسات الجزائرية
+                المساعد المالي الأول للمؤسسات الجزائرية
               </span>
             </div>
 
@@ -875,7 +875,7 @@ export default function LandingPage() {
               lineHeight: 1.3,
             }}
           >
-            ابدأ رحلتك نحو الامتثال الجبائي اليوم
+            ابدأ رحلتك نحو مستقبل مالي افضل
           </h2>
           <p
             style={{
@@ -943,11 +943,11 @@ export default function LandingPage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 12 }}>
-          <img src="/finmap-logo.jpg" alt="خريطة المالية" style={{ width: 32, height: 32, objectFit: "contain", borderRadius: 6 }} />
-          <span style={{ color: "#fff", fontWeight: 800, fontSize: "1rem" }}>خريطة المالية</span>
+          <img src="/finmap-logo.jpg" alt="الخريطة المالية" style={{ width: 32, height: 32, objectFit: "contain", borderRadius: 6 }} />
+          <span style={{ color: "#fff", fontWeight: 800, fontSize: "1rem" }}>الخريطة المالية</span>
         </div>
         <p style={{ color: SILVER, fontSize: "0.8rem" }}>
-          © {new Date().getFullYear()} Fin Map — المساعد الضريبي للمؤسسات الجزائرية
+          © {new Date().getFullYear()} Fin Map — المساعد المالي للمؤسسات الجزائرية
         </p>
       </footer>
     </div>
