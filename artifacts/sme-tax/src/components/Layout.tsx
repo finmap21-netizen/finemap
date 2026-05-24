@@ -1,12 +1,16 @@
-import { ReactNode, useEffect } from "react";
-import { Sidebar } from "./Sidebar";
+import { ReactNode, useEffect, useState } from "react";
+import { Sidebar, SidebarContent } from "./Sidebar";
 import { useGetMe, getGetMeQueryKey } from "@workspace/api-client-react";
 import { isAuthenticated, removeToken } from "@/lib/auth";
 import { useLocation } from "wouter";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location, setLocation] = useLocation();
   const authenticated = isAuthenticated();
+  const [open, setOpen] = useState(false);
 
   const { data: user, isLoading, isError } = useGetMe({
     query: {
@@ -52,10 +56,32 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex h-screen bg-background overflow-hidden" dir="rtl">
+      {/* Desktop Sidebar */}
       <Sidebar />
-      <main className="flex-1 overflow-y-auto p-8">
-        {children}
-      </main>
+
+      <div className="flex flex-col flex-1 overflow-hidden w-full">
+        {/* Mobile Header with Hamburger Menu */}
+        <header className="md:hidden flex items-center justify-between p-4 border-b bg-sidebar">
+          <h2 className="text-xl font-bold text-sidebar-primary">خريطة المالية</h2>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:bg-sidebar-accent/50">
+                <Menu size={24} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="p-0 bg-sidebar text-sidebar-foreground border-l-0 w-64">
+              <div className="flex flex-col h-full">
+                <SidebarContent onNavigate={() => setOpen(false)} />
+              </div>
+            </SheetContent>
+          </Sheet>
+        </header>
+
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 w-full">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
