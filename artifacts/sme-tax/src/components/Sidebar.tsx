@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useGetMe, useLogout } from "@workspace/api-client-react";
 import { removeToken } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Calendar, Calculator, Bell, BookOpen, Newspaper, Settings, UserCircle, LogOut, FileText } from "lucide-react";
+import { LayoutDashboard, Calendar, Calculator, Bell, BookOpen, Newspaper, Settings, UserCircle, LogOut, FileText, MessageSquare } from "lucide-react";
 
 export function Sidebar() {
   const [location] = useLocation();
@@ -26,6 +26,7 @@ export function Sidebar() {
     { href: "/invoice-requests", label: "طلبات الفواتير", icon: FileText },
     { href: "/knowledge", label: "قاعدة المعرفة", icon: BookOpen },
     { href: "/news", label: "الأخبار", icon: Newspaper },
+    { href: "/contact-admin", label: "تواصل مع الإدارة", icon: MessageSquare },
     { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
   ];
 

@@ -33,7 +33,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { Trash2, Pencil, Plus, Loader2, Clock, CheckCircle, XCircle } from "lucide-react";
@@ -58,6 +58,7 @@ export default function Admin() {
           <TabsTrigger value="news">الأخبار</TabsTrigger>
           <TabsTrigger value="knowledge">المعرفة</TabsTrigger>
           <TabsTrigger value="invoices">طلبات الفواتير</TabsTrigger>
+          <TabsTrigger value="messages">الرسائل</TabsTrigger>
           <TabsTrigger value="rules">القواعد الضريبية</TabsTrigger>
         </TabsList>
 
@@ -66,6 +67,7 @@ export default function Admin() {
         <TabsContent value="news"><NewsTab /></TabsContent>
         <TabsContent value="knowledge"><KnowledgeTab /></TabsContent>
         <TabsContent value="invoices"><InvoiceRequestsTab /></TabsContent>
+        <TabsContent value="messages"><MessagesTab /></TabsContent>
         <TabsContent value="rules"><RulesTab /></TabsContent>
       </Tabs>
     </div>
@@ -572,6 +574,74 @@ function RulesTab() {
                 <TableCell>{r.declarationType}</TableCell>
                 <TableCell className="text-sm max-w-xs">{r.legalDeadlineDescriptionAr}</TableCell>
                 <TableCell>{r.fixedFine ? `${r.fixedFine.toLocaleString()} د.ج` : '—'}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+}
+
+function MessagesTab() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  
+  const { data: messages, isLoading } = useQuery({
+    queryKey: ["supportMessages"],
+    queryFn: async () => {
+      const res = await fetch("/api/support/messages");
+      if (!res.ok) throw new Error("Failed to fetch");
+      return res.json();
+    }
+  });
+
+  const markAsRead = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/support/messages/${id}/read`, { method: "POST" });
+      if (!res.ok) throw new Error("Failed to mark as read");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["supportMessages"] });
+      toast({ title: "تم التحديث", description: "تم تحديد الرسالة كمقروءة" });
+    }
+  });
+
+  if (isLoading) return <div className="text-muted-foreground py-8 text-center">جاري التحميل...</div>;
+
+  return (
+    <Card>
+      <CardHeader><CardTitle>رسائل المستخدمين ({messages?.length || 0})</CardTitle></CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-right">المرسل</TableHead>
+              <TableHead className="text-right">الرسالة</TableHead>
+              <TableHead className="text-right">التاريخ</TableHead>
+              <TableHead className="text-right">الحالة</TableHead>
+              <TableHead className="text-right">إجراء</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {messages?.map((msg: any) => (
+              <TableRow key={msg.id} className={msg.isRead ? "opacity-70" : "font-semibold"}>
+                <TableCell>{msg.firstName} {msg.lastName}</TableCell>
+                <TableCell className="max-w-md">{msg.message}</TableCell>
+                <TableCell className="text-sm" dir="ltr">{new Date(msg.createdAt).toLocaleString("fr-DZ")}</TableCell>
+                <TableCell>
+                  <Badge variant={msg.isRead ? "secondary" : "default"}>
+                    {msg.isRead ? "مقروءة" : "جديدة"}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  {!msg.isRead && (
+                    <Button size="sm" variant="outline" onClick={() => markAsRead.mutate(msg.id)} disabled={markAsRead.isPending}>
+                      تحديد كمقروءة
+                    </Button>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

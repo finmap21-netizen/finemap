@@ -13,7 +13,7 @@ import adminRouter from "./admin";
 import invoiceRequestsRouter from "./invoice_requests";
 import anthropicRouter from "./anthropic/index";
 import storageRouter from "./storage";
-
+import { supportRouter } from "./support";
 const router: IRouter = Router();
 
 router.use(healthRouter);
@@ -30,5 +30,6 @@ router.use(adminRouter);
 router.use(invoiceRequestsRouter);
 router.use(anthropicRouter);
 router.use("/storage", storageRouter);
+router.use("/support", supportRouter);
 
 export default router;

@@ -16,6 +16,7 @@ import News from "@/pages/News";
 import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
 import InvoiceRequests from "@/pages/InvoiceRequests";
+import ContactAdmin from "@/pages/ContactAdmin";
 import { ChatBot } from "@/components/ChatBot";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { FinancialTips } from "@/components/FinancialTips";
@@ -50,6 +51,7 @@ function Router() {
         <Route path="/profile" component={Profile} />
         <Route path="/admin" component={Admin} />
         <Route path="/invoice-requests" component={InvoiceRequests} />
+        <Route path="/contact-admin" component={ContactAdmin} />
         <Route component={NotFound} />
       </Switch>
 
