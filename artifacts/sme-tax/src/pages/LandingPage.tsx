@@ -190,7 +190,7 @@ function Navbar({ onLogin, onRegister }: { onLogin: () => void; onRegister: () =
             letterSpacing: "-0.02em",
           }}
         >
-          خريطة المالية
+          الخريطة المالية
         </span>
       </div>
 
@@ -387,7 +387,7 @@ export default function LandingPage() {
                   animation: "shimmer 4s linear infinite",
                 }}
               >
-                الامتثال الضريبي
+                الامتثال المالي
               </span>
             </h1>
 
@@ -401,7 +401,7 @@ export default function LandingPage() {
                 maxWidth: 500,
               }}
             >
-              خريطة المالية — منصة ذكية تُرشدك في كل خطوة: من مواعيد التصريح إلى حساب الغرامات، مع أخبار جبائية حديثة وقاعدة معرفة شاملة لثلاثة أنظمة ضريبية.
+              خريطة المالية — منصة ذكية تُرشدك في كل خطوة: من مواعيد التصريح إلى حساب الغرامات، مع أخبار جبائية حديثة وقاعدة معرفة شاملة لثلاثة أنظمة ضريبية ومعلومات مهمة لمستقبل المؤسسات. 
             </p>
 
             <div
@@ -525,10 +525,10 @@ export default function LandingPage() {
                     WebkitTextFillColor: "transparent",
                   }}
                 >
-                  خريطة المالية
+                  الخريطة المالية
                 </div>
                 <div style={{ fontSize: "0.8rem", color: SILVER, fontWeight: 600, marginTop: 2 }}>
-                  Fin Map · الدليل الجبائي للمؤسسات
+                  Fin Map · الدليل المالي للمؤسسات
                 </div>
               </div>
             </div>
