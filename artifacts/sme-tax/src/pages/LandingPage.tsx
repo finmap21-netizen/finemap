@@ -155,22 +155,7 @@ function Navbar({ onLogin, onRegister }: { onLogin: () => void; onRegister: () =
   return (
     <nav
       dir="rtl"
-      style={{
-        position: "fixed",
-        top: 0,
-        right: 0,
-        left: 0,
-        zIndex: 100,
-        padding: "0 2rem",
-        height: 70,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        background: scrolled ? "rgba(255,255,255,0.95)" : "transparent",
-        backdropFilter: scrolled ? "blur(12px)" : "none",
-        borderBottom: scrolled ? `1px solid ${SILVER_LIGHT}` : "none",
-        transition: "all 0.3s ease",
-      }}
+      className={`fixed top-0 right-0 left-0 z-[100] px-4 md:px-8 h-[70px] flex items-center justify-between transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-md border-b border-[#c5d0de]" : "bg-transparent"}`}
     >
       {/* Logo + name */}
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -322,29 +307,14 @@ export default function LandingPage() {
 
       {/* ── HERO ── */}
       <section
+        className="relative min-h-[100vh] flex items-center px-4 md:px-8 pt-28 pb-16 overflow-hidden"
         style={{
-          position: "relative",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          padding: "90px 2rem 60px",
           background: `linear-gradient(160deg, #eef2ff 0%, #f8faff 50%, #e8f0fe 100%)`,
-          overflow: "hidden",
         }}
       >
         <AnimatedBackground />
 
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "4rem",
-            alignItems: "center",
-          }}
-        >
+        <div className="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left: Text */}
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Badge */}
@@ -368,14 +338,7 @@ export default function LandingPage() {
             </div>
 
             <h1
-              className="hero-title"
-              style={{
-                fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
-                fontWeight: 900,
-                lineHeight: 1.2,
-                color: "#0d1f4e",
-                marginBottom: 20,
-              }}
+              className="hero-title text-[#0d1f4e] font-black leading-tight mb-5 text-[clamp(2rem,6vw,3.4rem)] text-center lg:text-right"
             >
               وجّه مؤسستك نحو{" "}
               <span
@@ -392,21 +355,13 @@ export default function LandingPage() {
             </h1>
 
             <p
-              className="hero-sub"
-              style={{
-                fontSize: "1.1rem",
-                lineHeight: 1.9,
-                color: "#4a5568",
-                marginBottom: 36,
-                maxWidth: 500,
-              }}
+              className="hero-sub text-[#4a5568] leading-relaxed mb-8 max-w-[500px] mx-auto lg:mx-0 text-center lg:text-right text-[1.05rem] md:text-[1.1rem]"
             >
               خريطة المالية — منصة ذكية تُرشدك في كل خطوة: من مواعيد التصريح إلى حساب الغرامات، مع أخبار جبائية حديثة وقاعدة معرفة شاملة لثلاثة أنظمة ضريبية ومعلومات مهمة لمستقبل المؤسسات. 
             </p>
 
             <div
-              className="hero-cta"
-              style={{ display: "flex", gap: 14, flexWrap: "wrap" }}
+              className="hero-cta flex flex-wrap gap-4 justify-center lg:justify-start"
             >
               <button
                 onClick={goRegister}
@@ -464,7 +419,7 @@ export default function LandingPage() {
             </div>
 
             {/* Trust badges */}
-            <div style={{ display: "flex", gap: 24, marginTop: 40, flexWrap: "wrap" }}>
+            <div className="flex gap-4 md:gap-6 mt-10 flex-wrap justify-center lg:justify-start">
               {["بدون بطاقة ائتمان", "إعداد فوري", "دعم عربي"].map(b => (
                 <div key={b} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <svg viewBox="0 0 16 16" fill="none" style={{ width: 16, height: 16 }}>
@@ -478,15 +433,7 @@ export default function LandingPage() {
           </div>
 
           {/* Right: Visual */}
-          <div
-            className="hero-visual"
-            style={{
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <div className="hero-visual relative flex justify-center items-center mt-8 lg:mt-0">
             {/* Glow ring */}
             <div
               style={{
@@ -535,57 +482,24 @@ export default function LandingPage() {
 
             {/* Floating mini-cards */}
             <div
-              style={{
-                position: "absolute",
-                top: "8%",
-                left: "-10%",
-                background: "#fff",
-                borderRadius: 14,
-                padding: "10px 16px",
-                boxShadow: `0 8px 24px ${BLUE}20`,
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                animation: "float-up 1s ease 0.6s both",
-                zIndex: 3,
-              }}
+              className="absolute bg-white rounded-2xl px-3 py-2 md:px-4 md:py-2.5 shadow-lg flex items-center gap-2 z-10 animate-[float-up_1s_ease_0.6s_both]"
+              style={{ top: "5%", left: "-5%" }}
             >
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e" }} />
               <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#1e293b" }}>G50 — تم الإيداع</span>
             </div>
 
             <div
-              style={{
-                position: "absolute",
-                bottom: "10%",
-                left: "-8%",
-                background: "#fff",
-                borderRadius: 14,
-                padding: "10px 16px",
-                boxShadow: `0 8px 24px ${BLUE}20`,
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                animation: "float-up 1s ease 0.8s both",
-                zIndex: 3,
-              }}
+              className="absolute bg-white rounded-2xl px-3 py-2 md:px-4 md:py-2.5 shadow-lg flex items-center gap-2 z-10 animate-[float-up_1s_ease_0.8s_both]"
+              style={{ bottom: "5%", left: "0%" }}
             >
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#f59e0b" }} />
               <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#1e293b" }}>IBS — 12 يوم</span>
             </div>
 
             <div
-              style={{
-                position: "absolute",
-                top: "15%",
-                right: "-12%",
-                background: `linear-gradient(135deg, ${BLUE}, ${BLUE_LIGHT})`,
-                borderRadius: 14,
-                padding: "10px 16px",
-                boxShadow: `0 8px 24px ${BLUE}40`,
-                animation: "float-up 1s ease 1s both",
-                zIndex: 3,
-              }}
+              className="absolute rounded-2xl px-3 py-2 md:px-4 md:py-2.5 shadow-xl animate-[float-up_1s_ease_1s_both] z-10"
+              style={{ top: "15%", right: "-5%", background: `linear-gradient(135deg, ${BLUE}, ${BLUE_LIGHT})` }}
             >
               <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#fff" }}>غرامة 0 دج</div>
               <div style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.7)" }}>امتثال تام</div>
@@ -596,21 +510,10 @@ export default function LandingPage() {
 
       {/* ── STATS ── */}
       <section
-        style={{
-          background: `linear-gradient(135deg, ${BLUE} 0%, #0f2a7a 100%)`,
-          padding: "56px 2rem",
-        }}
+        className="py-12 md:py-16 px-4 md:px-8"
+        style={{ background: `linear-gradient(135deg, ${BLUE} 0%, #0f2a7a 100%)` }}
       >
-        <div
-          style={{
-            maxWidth: 1000,
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "2rem",
-            textAlign: "center",
-          }}
-        >
+        <div className="max-w-[1000px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((s, i) => (
             <div key={i}>
               <div
@@ -633,14 +536,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section
-        style={{
-          padding: "80px 2rem",
-          background: "#f8faff",
-        }}
-      >
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 56 }}>
+      <section className="py-16 md:py-24 px-4 md:px-8 bg-[#f8faff]">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-12 md:mb-16">
             <div
               style={{
                 display: "inline-block",
@@ -671,13 +569,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "1.5rem",
-            }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f, i) => (
               <div
                 key={i}
@@ -725,13 +617,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section
-        style={{
-          padding: "80px 2rem",
-          background: `linear-gradient(160deg, #eef2ff 0%, #f0f4ff 100%)`,
-        }}
-      >
-        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+      <section className="py-16 md:py-24 px-4 md:px-8" style={{ background: `linear-gradient(160deg, #eef2ff 0%, #f0f4ff 100%)` }}>
+        <div className="max-w-[900px] mx-auto text-center">
           <div
             style={{
               display: "inline-block",
@@ -758,13 +645,7 @@ export default function LandingPage() {
             ثلاث خطوات للبدء
           </h2>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "2rem",
-            }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-right md:text-center mt-12">
             {[
               { step: "01", title: "أنشئ حسابك", desc: "سجّل مؤسستك واختر نظامك الجبائي (حقيقي / مبسط / جزافي) في دقيقتين." },
               { step: "02", title: "تابع مواعيدك", desc: "يحسب التقويم الذكي مواعيد تصريحاتك ويُنبّهك قبل كل استحقاق." },
@@ -827,12 +708,8 @@ export default function LandingPage() {
 
       {/* ── CTA ── */}
       <section
-        style={{
-          padding: "80px 2rem",
-          background: `linear-gradient(135deg, #0d1f4e 0%, ${BLUE} 50%, #1a5cb5 100%)`,
-          position: "relative",
-          overflow: "hidden",
-        }}
+        className="py-16 md:py-24 px-4 md:px-8 relative overflow-hidden"
+        style={{ background: `linear-gradient(135deg, #0d1f4e 0%, ${BLUE} 50%, #1a5cb5 100%)` }}
       >
         {/* Decorative rings */}
         <div
