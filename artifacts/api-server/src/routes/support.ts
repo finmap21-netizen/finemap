@@ -42,7 +42,7 @@ supportRouter.post("/messages/:id/read", requireAdmin, async (req, res) => {
 // Create a new support message (User)
 supportRouter.post("/messages", requireAuth, async (req, res) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).userId;
     const { firstName, lastName, message } = req.body;
     
     if (!firstName || !lastName || !message) {

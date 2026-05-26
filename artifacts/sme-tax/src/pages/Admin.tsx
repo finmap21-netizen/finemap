@@ -590,7 +590,9 @@ function MessagesTab() {
   const { data: messages, isLoading } = useQuery({
     queryKey: ["supportMessages"],
     queryFn: async () => {
-      const res = await fetch("/api/support/messages");
+      const res = await fetch("/api/support/messages", {
+        headers: { "Authorization": `Bearer ${localStorage.getItem("auth_token")}` }
+      });
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
     }
@@ -598,7 +600,10 @@ function MessagesTab() {
 
   const markAsRead = useMutation({
     mutationFn: async (id: number) => {
-      const res = await fetch(`/api/support/messages/${id}/read`, { method: "POST" });
+      const res = await fetch(`/api/support/messages/${id}/read`, { 
+        method: "POST",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("auth_token")}` }
+      });
       if (!res.ok) throw new Error("Failed to mark as read");
       return res.json();
     },
