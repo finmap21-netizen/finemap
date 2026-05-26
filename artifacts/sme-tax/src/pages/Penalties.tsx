@@ -91,11 +91,11 @@ export default function Penalties() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>تاريخ الاستحقاق (القانوني)</Label>
-                  <Input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required />
+                  <Input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required min="2000-01-01" max="2099-12-31" />
                 </div>
                 <div className="space-y-2">
                   <Label>تاريخ الدفع الفعلي</Label>
-                  <Input type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} required />
+                  <Input type="date" value={paymentDate} onChange={e => setPaymentDate(e.target.value)} required min="2000-01-01" max="2099-12-31" />
                 </div>
               </div>
 
@@ -134,7 +134,7 @@ export default function Penalties() {
                 </div>
                 <div className="bg-white p-3 rounded border">
                   <span className="text-muted-foreground block mb-1">نسبة الغرامة</span>
-                  <span className="font-bold">{(calculatePenalty.data.penaltyRate * 100).toFixed(0)}%</span>
+                  <span className="font-bold">{calculatePenalty.data.penaltyRate.toFixed(0)}%</span>
                 </div>
               </div>
 
