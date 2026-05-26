@@ -586,6 +586,8 @@ function RulesTab() {
 function MessagesTab() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [replyMsg, setReplyMsg] = useState<any>(null);
+  const [replyText, setReplyText] = useState("");
   
   const { data: messages, isLoading } = useQuery({
     queryKey: ["supportMessages"],
@@ -613,45 +615,113 @@ function MessagesTab() {
     }
   });
 
+  const sendReply = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/support/messages/${id}/reply`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("auth_token")}`
+        },
+        body: JSON.stringify({ reply: replyText })
+      });
+      if (!res.ok) throw new Error("Failed to reply");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["supportMessages"] });
+      toast({ title: "تم الرد", description: "تم الرد على الرسالة بنجاح" });
+      setReplyMsg(null);
+      setReplyText("");
+    },
+    onError: () => {
+      toast({ title: "خطأ", description: "فشل إرسال الرد", variant: "destructive" });
+    }
+  });
+
   if (isLoading) return <div className="text-muted-foreground py-8 text-center">جاري التحميل...</div>;
 
   return (
-    <Card>
-      <CardHeader><CardTitle>رسائل المستخدمين ({messages?.length || 0})</CardTitle></CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-right">المرسل</TableHead>
-              <TableHead className="text-right">الرسالة</TableHead>
-              <TableHead className="text-right">التاريخ</TableHead>
-              <TableHead className="text-right">الحالة</TableHead>
-              <TableHead className="text-right">إجراء</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {messages?.map((msg: any) => (
-              <TableRow key={msg.id} className={msg.isRead ? "opacity-70" : "font-semibold"}>
-                <TableCell>{msg.firstName} {msg.lastName}</TableCell>
-                <TableCell className="max-w-md">{msg.message}</TableCell>
-                <TableCell className="text-sm" dir="ltr">{new Date(msg.createdAt).toLocaleString("fr-DZ")}</TableCell>
-                <TableCell>
-                  <Badge variant={msg.isRead ? "secondary" : "default"}>
-                    {msg.isRead ? "مقروءة" : "جديدة"}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {!msg.isRead && (
-                    <Button size="sm" variant="outline" onClick={() => markAsRead.mutate(msg.id)} disabled={markAsRead.isPending}>
-                      تحديد كمقروءة
-                    </Button>
-                  )}
-                </TableCell>
+    <>
+      <Card>
+        <CardHeader><CardTitle>رسائل المستخدمين ({messages?.length || 0})</CardTitle></CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-right">المرسل</TableHead>
+                <TableHead className="text-right">الرسالة</TableHead>
+                <TableHead className="text-right">التاريخ</TableHead>
+                <TableHead className="text-right">الحالة</TableHead>
+                <TableHead className="text-right">إجراء</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+            </TableHeader>
+            <TableBody>
+              {messages?.map((msg: any) => (
+                <TableRow key={msg.id} className={msg.isRead ? "opacity-70" : "font-semibold"}>
+                  <TableCell>{msg.firstName} {msg.lastName}</TableCell>
+                  <TableCell className="max-w-md">
+                    <p>{msg.message}</p>
+                    {msg.adminReply && (
+                      <div className="mt-2 p-2 bg-muted/50 rounded-md border text-sm">
+                        <strong className="text-primary">رد الإدارة:</strong> {msg.adminReply}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-sm" dir="ltr">{new Date(msg.createdAt).toLocaleString("fr-DZ")}</TableCell>
+                  <TableCell>
+                    <Badge variant={msg.adminReply ? "success" : msg.isRead ? "secondary" : "default"} className={msg.adminReply ? "bg-green-600 text-white" : ""}>
+                      {msg.adminReply ? "تم الرد" : msg.isRead ? "مقروءة" : "جديدة"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={() => setReplyMsg(msg)}>
+                        {msg.adminReply ? "تعديل الرد" : "الرد"}
+                      </Button>
+                      {!msg.isRead && !msg.adminReply && (
+                        <Button size="sm" variant="ghost" onClick={() => markAsRead.mutate(msg.id)} disabled={markAsRead.isPending}>
+                          تحديد كمقروءة
+                        </Button>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Dialog open={!!replyMsg} onOpenChange={(v) => !v && setReplyMsg(null)}>
+        <DialogContent dir="rtl" className="max-w-lg">
+          <DialogHeader><DialogTitle>الرد على الرسالة</DialogTitle></DialogHeader>
+          {replyMsg && (
+            <div className="space-y-4">
+              <div className="p-3 bg-muted rounded-md text-sm">
+                <strong>رسالة المستخدم:</strong>
+                <p className="mt-1">{replyMsg.message}</p>
+              </div>
+              <div className="space-y-2">
+                <Label>نص الرد</Label>
+                <Textarea 
+                  rows={4} 
+                  placeholder="اكتب ردك هنا..." 
+                  value={replyText || replyMsg.adminReply || ""} 
+                  onChange={e => setReplyText(e.target.value)} 
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter className="flex-row-reverse gap-2">
+            <Button onClick={() => sendReply.mutate(replyMsg?.id)} disabled={sendReply.isPending || (!replyText && !replyMsg?.adminReply)}>
+              {sendReply.isPending ? <Loader2 size={14} className="animate-spin ml-2" /> : null}
+              إرسال الرد
+            </Button>
+            <Button variant="outline" onClick={() => setReplyMsg(null)}>إلغاء</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

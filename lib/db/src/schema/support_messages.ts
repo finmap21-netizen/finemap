@@ -10,6 +10,7 @@ export const supportMessages = pgTable("support_messages", {
   lastName: text("last_name").notNull(),
   email: text("email"),
   message: text("message").notNull(),
+  adminReply: text("admin_reply"),
   isRead: boolean("is_read").default(false).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
