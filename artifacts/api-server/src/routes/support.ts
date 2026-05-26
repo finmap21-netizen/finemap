@@ -3,7 +3,7 @@ import { db } from "@workspace/db";
 import { supportMessages, insertSupportMessageSchema } from "@workspace/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
-import { requireAuth, requireAdmin } from "../middleware/auth";
+import { requireAuth, requireAdmin } from "../lib/auth";
 
 export const supportRouter = Router();
 
