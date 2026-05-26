@@ -25,6 +25,7 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
     { href: "/reminders", label: "التذكيرات", icon: Bell },
     { href: "/invoice-requests", label: "طلبات الفواتير", icon: FileText },
     { href: "/knowledge", label: "قاعدة المعرفة", icon: BookOpen },
+    { href: "/laws-library", label: "مكتبة القوانين", icon: BookOpen },
     { href: "/news", label: "الأخبار", icon: Newspaper },
     { href: "/contact-admin", label: "تواصل مع الإدارة", icon: MessageSquare },
     { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
