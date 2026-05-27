@@ -37,6 +37,7 @@ import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { Trash2, Pencil, Plus, Loader2, Clock, CheckCircle, XCircle } from "lucide-react";
+import { LayoutDashboard, Users, Newspaper, BookOpen, FileText, MessageSquare, Scale } from "lucide-react";
 
 export default function Admin() {
   const { data: user } = useGetMe({ query: { enabled: true, queryKey: useGetMe.name as any } });
@@ -48,28 +49,38 @@ export default function Admin() {
   }
 
   return (
-    <div className="space-y-6" dir="rtl">
-      <h1 className="text-3xl font-bold text-primary">لوحة الإدارة</h1>
+    <div className="flex flex-col h-full min-h-[80vh]" dir="rtl">
+      <div className="bg-primary/5 p-6 rounded-t-xl border-b border-border/50">
+        <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
+          <LayoutDashboard className="h-8 w-8" />
+          لوحة تحكم الإدارة
+        </h1>
+        <p className="text-muted-foreground mt-2">إدارة المستخدمين، المحتوى، والطلبات بشكل كامل.</p>
+      </div>
 
-      <Tabs defaultValue="stats" className="w-full">
-        <TabsList className="w-full justify-start mb-4 flex-wrap h-auto gap-1">
-          <TabsTrigger value="stats">الإحصائيات</TabsTrigger>
-          <TabsTrigger value="users">المستخدمين</TabsTrigger>
-          <TabsTrigger value="news">الأخبار</TabsTrigger>
-          <TabsTrigger value="knowledge">المعرفة</TabsTrigger>
-          <TabsTrigger value="invoices">طلبات الفواتير</TabsTrigger>
-          <TabsTrigger value="messages">الرسائل</TabsTrigger>
-          <TabsTrigger value="rules">القواعد الضريبية</TabsTrigger>
-        </TabsList>
+      <div className="flex-1 bg-card rounded-b-xl shadow-sm border border-t-0 border-border/50">
+        <Tabs defaultValue="stats" className="flex flex-col md:flex-row h-full">
+          <TabsList className="w-full md:w-64 flex flex-col h-auto justify-start items-stretch bg-muted/30 p-4 border-l border-border/50 space-y-2 rounded-br-xl">
+            <TabsTrigger value="stats" className="justify-start gap-2 py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"><LayoutDashboard size={18}/> الإحصائيات</TabsTrigger>
+            <TabsTrigger value="users" className="justify-start gap-2 py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"><Users size={18}/> إدارة المستخدمين</TabsTrigger>
+            <TabsTrigger value="news" className="justify-start gap-2 py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"><Newspaper size={18}/> الأخبار الضريبية</TabsTrigger>
+            <TabsTrigger value="knowledge" className="justify-start gap-2 py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"><BookOpen size={18}/> قاعدة المعرفة</TabsTrigger>
+            <TabsTrigger value="invoices" className="justify-start gap-2 py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"><FileText size={18}/> طلبات الفواتير</TabsTrigger>
+            <TabsTrigger value="messages" className="justify-start gap-2 py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"><MessageSquare size={18}/> الدعم والرسائل</TabsTrigger>
+            <TabsTrigger value="rules" className="justify-start gap-2 py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"><Scale size={18}/> القواعد الضريبية</TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="stats"><StatsTab /></TabsContent>
-        <TabsContent value="users"><UsersTab currentUserId={user?.id} /></TabsContent>
-        <TabsContent value="news"><NewsTab /></TabsContent>
-        <TabsContent value="knowledge"><KnowledgeTab /></TabsContent>
-        <TabsContent value="invoices"><InvoiceRequestsTab /></TabsContent>
-        <TabsContent value="messages"><MessagesTab /></TabsContent>
-        <TabsContent value="rules"><RulesTab /></TabsContent>
-      </Tabs>
+          <div className="flex-1 p-6 overflow-auto">
+            <TabsContent value="stats" className="m-0"><StatsTab /></TabsContent>
+            <TabsContent value="users" className="m-0"><UsersTab currentUserId={user?.id} /></TabsContent>
+            <TabsContent value="news" className="m-0"><NewsTab /></TabsContent>
+            <TabsContent value="knowledge" className="m-0"><KnowledgeTab /></TabsContent>
+            <TabsContent value="invoices" className="m-0"><InvoiceRequestsTab /></TabsContent>
+            <TabsContent value="messages" className="m-0"><MessagesTab /></TabsContent>
+            <TabsContent value="rules" className="m-0"><RulesTab /></TabsContent>
+          </div>
+        </Tabs>
+      </div>
     </div>
   );
 }
