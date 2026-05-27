@@ -23,6 +23,8 @@ import { OnboardingModal } from "@/components/OnboardingModal";
 import { FinancialTips } from "@/components/FinancialTips";
 import { isAuthenticated } from "@/lib/auth";
 
+import InvoiceGenerator from "@/pages/InvoiceGenerator";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -52,6 +54,7 @@ function Router() {
         <Route path="/profile" component={Profile} />
         <Route path="/admin" component={Admin} />
         <Route path="/invoice-requests" component={InvoiceRequests} />
+        <Route path="/invoice-generator" component={InvoiceGenerator} />
         <Route path="/contact-admin" component={ContactAdmin} />
         <Route path="/laws-library" component={LawsLibrary} />
         <Route component={NotFound} />
