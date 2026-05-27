@@ -18,22 +18,23 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
     });
   };
 
-  const navItems = [
-    { href: "/dashboard", label: "لوحة القيادة", icon: LayoutDashboard },
-    { href: "/calendar", label: "التقويم الضريبي", icon: Calendar },
-    { href: "/penalties", label: "حساب الغرامات", icon: Calculator },
-    { href: "/reminders", label: "التذكيرات", icon: Bell },
-    { href: "/invoice-requests", label: "طلبات الفواتير", icon: FileText },
-    { href: "/knowledge", label: "قاعدة المعرفة", icon: BookOpen },
-    { href: "/laws-library", label: "مكتبة القوانين", icon: BookOpen },
-    { href: "/news", label: "الأخبار", icon: Newspaper },
-    { href: "/contact-admin", label: "تواصل مع الإدارة", icon: MessageSquare },
-    { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
-  ];
-
-  if (user?.role === "admin") {
-    navItems.push({ href: "/admin", label: "لوحة الإدارة", icon: Settings });
-  }
+  const navItems = user?.role === "admin" 
+    ? [
+        { href: "/admin", label: "لوحة الإدارة", icon: LayoutDashboard },
+        { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
+      ]
+    : [
+        { href: "/dashboard", label: "لوحة القيادة", icon: LayoutDashboard },
+        { href: "/calendar", label: "التقويم الضريبي", icon: Calendar },
+        { href: "/penalties", label: "حساب الغرامات", icon: Calculator },
+        { href: "/reminders", label: "التذكيرات", icon: Bell },
+        { href: "/invoice-requests", label: "طلبات الفواتير", icon: FileText },
+        { href: "/knowledge", label: "قاعدة المعرفة", icon: BookOpen },
+        { href: "/laws-library", label: "مكتبة القوانين", icon: BookOpen },
+        { href: "/news", label: "الأخبار", icon: Newspaper },
+        { href: "/contact-admin", label: "تواصل مع الإدارة", icon: MessageSquare },
+        { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
+      ];
 
   return (
     <>
