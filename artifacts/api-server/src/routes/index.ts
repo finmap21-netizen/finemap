@@ -16,6 +16,7 @@ import storageRouter from "./storage";
 import { supportRouter } from "./support";
 import { lawsRouter } from "./laws";
 import { chatRouter } from "./chat";
+import invoiceAnalyzerRouter from "./invoice_analyzer";
 
 const router: IRouter = Router();
 
@@ -36,5 +37,6 @@ router.use("/storage", storageRouter);
 router.use("/support", supportRouter);
 router.use("/laws", lawsRouter);
 router.use("/chat", chatRouter);
+router.use(invoiceAnalyzerRouter);
 
 export default router;

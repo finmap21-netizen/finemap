@@ -28,7 +28,7 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         { href: "/calendar", label: "التقويم الضريبي", icon: Calendar },
         { href: "/penalties", label: "حساب الغرامات", icon: Calculator },
         { href: "/reminders", label: "التذكيرات", icon: Bell },
-        { href: "/invoice-requests", label: "طلبات الفواتير", icon: FileText },
+        { href: "/invoice-requests", label: "محطة الفواتير الذكية", icon: FileText },
         { href: "/knowledge", label: "قاعدة المعرفة", icon: BookOpen },
         { href: "/laws-library", label: "مكتبة القوانين", icon: BookOpen },
         { href: "/news", label: "الأخبار", icon: Newspaper },
