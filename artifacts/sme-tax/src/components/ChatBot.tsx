@@ -41,7 +41,7 @@ export function ChatBot() {
       if (response.ok) {
         setMessages([...newMessages, { role: "model", content: data.reply }]);
       } else {
-        setMessages([...newMessages, { role: "model", content: "عذراً، حدث خطأ أثناء الاتصال بالخادم." }]);
+        setMessages([...newMessages, { role: "model", content: data.reply || "عذراً، حدث خطأ أثناء الاتصال بالخادم." }]);
       }
     } catch (error) {
       setMessages([...newMessages, { role: "model", content: "عذراً، حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى." }]);

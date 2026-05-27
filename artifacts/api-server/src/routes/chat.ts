@@ -30,7 +30,7 @@ chatRouter.post("/", async (req, res) => {
       }
     };
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -42,7 +42,10 @@ chatRouter.post("/", async (req, res) => {
 
     if (!response.ok) {
       console.error("Gemini API Error:", data);
-      return res.status(500).json({ error: "Failed to communicate with AI model" });
+      if (data?.error?.message?.includes("leaked")) {
+        return res.status(500).json({ reply: "عذراً، مفتاح API الخاص بك تم إيقافه من قبل Google لأنه تسرب (Leaked). يرجى إنشاء مفتاح جديد." });
+      }
+      return res.status(500).json({ error: "Failed to communicate with AI model", details: data.error });
     }
 
     const aiMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || "عذراً، لم أتمكن من فهم طلبك.";
