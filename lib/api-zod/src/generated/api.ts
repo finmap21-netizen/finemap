@@ -85,9 +85,12 @@ export const UpdateCompanyBody = zod.object({
   companyName: zod.string(),
   activityType: zod.enum([
     "commerce",
+    "sales",
     "services",
     "production",
     "auto_entrepreneur",
+    "ibs",
+    "irg",
   ]),
   annualRevenue: zod.number().nullish(),
   employeeCount: zod.number().nullish(),

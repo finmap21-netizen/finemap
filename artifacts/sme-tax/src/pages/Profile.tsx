@@ -102,10 +102,12 @@ export default function Profile() {
                 <Select value={activityType} onValueChange={(val: any) => setActivityType(val)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="commerce">تجارة</SelectItem>
+                    <SelectItem value="commerce">مبيعات</SelectItem>
                     <SelectItem value="services">خدمات</SelectItem>
-                    <SelectItem value="production">إنتاج</SelectItem>
+                    <SelectItem value="production">انتاج</SelectItem>
                     <SelectItem value="auto_entrepreneur">مقاول ذاتي</SelectItem>
+                    <SelectItem value="ibs">IBS</SelectItem>
+                    <SelectItem value="irg">IRG</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

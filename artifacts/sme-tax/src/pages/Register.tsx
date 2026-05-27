@@ -17,7 +17,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   
   const [companyName, setCompanyName] = useState("");
-  const [activityType, setActivityType] = useState<"commerce"|"services"|"production"|"auto_entrepreneur">("commerce");
+  const [activityType, setActivityType] = useState<"commerce"|"services"|"production"|"auto_entrepreneur"|"ibs"|"irg">("commerce");
   const [annualRevenue, setAnnualRevenue] = useState("");
   const [employeeCount, setEmployeeCount] = useState("");
   const [taxRegime, setTaxRegime] = useState<"real"|"simplified_real"|"forfaitaire">("real");
@@ -104,10 +104,12 @@ export default function Register() {
                   <Select value={activityType} onValueChange={(val: any) => setActivityType(val)}>
                     <SelectTrigger><SelectValue placeholder="اختر النشاط" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="commerce">تجارة</SelectItem>
+                      <SelectItem value="commerce">مبيعات</SelectItem>
                       <SelectItem value="services">خدمات</SelectItem>
-                      <SelectItem value="production">إنتاج</SelectItem>
+                      <SelectItem value="production">انتاج</SelectItem>
                       <SelectItem value="auto_entrepreneur">مقاول ذاتي</SelectItem>
+                      <SelectItem value="ibs">IBS</SelectItem>
+                      <SelectItem value="irg">IRG</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

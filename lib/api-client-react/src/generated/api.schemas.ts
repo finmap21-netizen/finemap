@@ -54,9 +54,12 @@ export type UpdateCompanyBodyActivityType =
 
 export const UpdateCompanyBodyActivityType = {
   commerce: "commerce",
+  sales: "sales",
   services: "services",
   production: "production",
   auto_entrepreneur: "auto_entrepreneur",
+  ibs: "ibs",
+  irg: "irg",
 } as const;
 
 export type UpdateCompanyBodyTaxRegime =
