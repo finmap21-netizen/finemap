@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const chatRouter = Router();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyDnuqQli7ssO8eLG2MUNJ8MOjUNFEXjAho";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyAZvS2ciyKwkbEqS6bvRU0VNsTrND23nCM";
 
 chatRouter.post("/", async (req, res) => {
   try {
