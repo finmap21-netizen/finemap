@@ -3,11 +3,14 @@ import { useGetMe, useLogout } from "@workspace/api-client-react";
 import { removeToken } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Calendar, Calculator, Bell, BookOpen, Newspaper, Settings, UserCircle, LogOut, FileText, MessageSquare } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const [location] = useLocation();
   const { data: user } = useGetMe();
   const logout = useLogout();
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     logout.mutate(undefined, {
@@ -56,10 +59,14 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           );
         })}
       </nav>
-      <div className="p-4 border-t border-sidebar-border mt-auto">
+      <div className="p-4 border-t border-sidebar-border mt-auto flex flex-col gap-2">
+        <div className="flex items-center justify-between px-2 py-1">
+          <span className="text-sm font-medium">{t('language')}</span>
+          <LanguageSwitcher />
+        </div>
         <Button variant="ghost" className="w-full justify-start gap-3 text-red-400 hover:text-red-300 hover:bg-red-950/20" onClick={handleLogout}>
           <LogOut size={20} />
-          <span>تسجيل الخروج</span>
+          <span>{t('logout')}</span>
         </Button>
       </div>
     </>

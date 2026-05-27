@@ -1,0 +1,14 @@
+{
+  "translation": {
+    "app_title": "Assistant Fiscal",
+    "dashboard": "Tableau de Bord",
+    "invoices": "Factures",
+    "knowledge": "Base de Connaissance",
+    "laws": "Bibliothèque des Lois",
+    "profile": "Profil",
+    "logout": "Déconnexion",
+    "language": "Langue",
+    "arabic": "العربية",
+    "french": "Français"
+  }
+}

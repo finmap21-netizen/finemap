@@ -45,7 +45,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-background" dir="rtl">
+      <div className="flex h-screen items-center justify-center bg-background">
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-muted-foreground text-sm">جاري التحميل...</p>
@@ -55,7 +55,7 @@ export function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden" dir="rtl">
+    <div className="flex h-screen bg-background overflow-hidden">
       {/* Desktop Sidebar */}
       <Sidebar />
 
