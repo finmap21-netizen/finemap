@@ -98,15 +98,25 @@ export function ChatBot() {
         body: JSON.stringify({ messages: apiMessages }),
       });
 
-      const data = await response.json();
+      let data;
+      const textResponse = await response.text();
+      try {
+        data = JSON.parse(textResponse);
+      } catch (e) {
+        console.error("Non-JSON response from server:", textResponse);
+        setMessages([...newMessages, { role: "model", parts: [{ text: "عذراً، الخادم لا يستجيب بشكل صحيح. تأكد من أن التحديث الأخير تم بنجاح على منصة Render." }] }]);
+        setIsLoading(false);
+        return;
+      }
 
       if (response.ok) {
         setMessages([...newMessages, { role: "model", parts: [{ text: data.reply }] }]);
       } else {
-        setMessages([...newMessages, { role: "model", parts: [{ text: data.reply || "عذراً، حدث خطأ أثناء الاتصال بالخادم." }] }]);
+        setMessages([...newMessages, { role: "model", parts: [{ text: data.reply || data.error || "عذراً، حدث خطأ أثناء الاتصال بالخادم." }] }]);
       }
     } catch (error) {
-      setMessages([...newMessages, { role: "model", parts: [{ text: "عذراً، حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى." }] }]);
+      console.error("Network Error:", error);
+      setMessages([...newMessages, { role: "model", parts: [{ text: "عذراً، حدث خطأ في الاتصال. الخادم غير متاح حالياً." }] }]);
     } finally {
       setIsLoading(false);
     }
