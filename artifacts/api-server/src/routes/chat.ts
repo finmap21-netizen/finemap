@@ -2,10 +2,14 @@ import { Router } from "express";
 
 const chatRouter = Router();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyAZvS2ciyKwkbEqS6bvRU0VNsTrND23nCM";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 chatRouter.post("/", async (req, res) => {
   try {
+    if (!GEMINI_API_KEY) {
+      return res.status(500).json({ reply: "مفتاح API الخاص بـ Gemini غير مُعرّف. يرجى ضبط متغير البيئة GEMINI_API_KEY." });
+    }
+
     const { messages } = req.body; // Expect an array of objects { role: 'user' | 'model', parts: [{text: "..."}] }
     
     if (!messages || !Array.isArray(messages)) {

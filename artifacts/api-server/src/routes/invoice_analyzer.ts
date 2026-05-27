@@ -3,10 +3,15 @@ import { requireAuth } from "../lib/auth";
 
 const router = Router();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyAZvS2ciyKwkbEqS6bvRU0VNsTrND23nCM";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 router.post("/invoices/analyze", requireAuth, async (req, res): Promise<void> => {
   try {
+    if (!GEMINI_API_KEY) {
+      res.status(500).json({ error: "مفتاح API الخاص بـ Gemini غير مُعرّف. يرجى ضبط متغير البيئة GEMINI_API_KEY." });
+      return;
+    }
+
     const { fileBase64, mimeType } = req.body;
 
     if (!fileBase64 || !mimeType) {
