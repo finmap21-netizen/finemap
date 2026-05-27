@@ -15,6 +15,7 @@ import anthropicRouter from "./anthropic/index";
 import storageRouter from "./storage";
 import { supportRouter } from "./support";
 import { lawsRouter } from "./laws";
+import { chatRouter } from "./chat";
 
 const router: IRouter = Router();
 
@@ -34,5 +35,6 @@ router.use(anthropicRouter);
 router.use("/storage", storageRouter);
 router.use("/support", supportRouter);
 router.use("/laws", lawsRouter);
+router.use("/chat", chatRouter);
 
 export default router;
