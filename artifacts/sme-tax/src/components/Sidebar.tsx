@@ -23,21 +23,21 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
   const navItems = user?.role === "admin" 
     ? [
-        { href: "/admin", label: "لوحة الإدارة", icon: LayoutDashboard },
-        { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
+        { href: "/admin", labelKey: "admin_dashboard", icon: LayoutDashboard },
+        { href: "/profile", labelKey: "profile", icon: UserCircle },
       ]
     : [
-        { href: "/dashboard", label: "لوحة القيادة", icon: LayoutDashboard },
-        { href: "/calendar", label: "التقويم الضريبي", icon: Calendar },
-        { href: "/penalties", label: "حساب الغرامات", icon: Calculator },
-        { href: "/reminders", label: "التذكيرات", icon: Bell },
-        { href: "/invoice-requests", label: "محطة الفواتير الذكية", icon: FileText },
-        { href: "/invoice-generator", label: "صانع الفواتير", icon: FileText },
-        { href: "/knowledge", label: "قاعدة المعرفة", icon: BookOpen },
-        { href: "/laws-library", label: "مكتبة القوانين", icon: BookOpen },
-        { href: "/news", label: "الأخبار", icon: Newspaper },
-        { href: "/contact-admin", label: "تواصل مع الإدارة", icon: MessageSquare },
-        { href: "/profile", label: "الملف الشخصي", icon: UserCircle },
+        { href: "/dashboard", labelKey: "dashboard", icon: LayoutDashboard },
+        { href: "/calendar", labelKey: "calendar", icon: Calendar },
+        { href: "/penalties", labelKey: "penalties", icon: Calculator },
+        { href: "/reminders", labelKey: "reminders", icon: Bell },
+        { href: "/invoice-requests", labelKey: "invoice_requests", icon: FileText },
+        { href: "/invoice-generator", labelKey: "invoice_generator", icon: FileText },
+        { href: "/knowledge", labelKey: "knowledge", icon: BookOpen },
+        { href: "/laws-library", labelKey: "laws_library", icon: BookOpen },
+        { href: "/news", labelKey: "news", icon: Newspaper },
+        { href: "/contact-admin", labelKey: "contact_admin", icon: MessageSquare },
+        { href: "/profile", labelKey: "profile", icon: UserCircle },
       ];
 
   return (
@@ -53,7 +53,7 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             <Link key={item.href} href={item.href} onClick={() => onNavigate?.()}>
               <div className={`flex items-center gap-3 px-4 py-3 rounded-md cursor-pointer transition-colors ${isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/50"}`}>
                 <Icon size={20} />
-                <span className="font-medium">{item.label}</span>
+                <span className="font-medium">{t(item.labelKey)}</span>
               </div>
             </Link>
           );

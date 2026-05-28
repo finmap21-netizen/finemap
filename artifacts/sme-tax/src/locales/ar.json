@@ -1,7 +1,8 @@
 {
   "translation": {
     "app_title": "مساعد مالي",
-    "dashboard": "لوحة التحكم",
+    "dashboard": "لوحة القيادة",
+    "admin_dashboard": "لوحة الإدارة",
     "invoices": "الفواتير",
     "knowledge": "قاعدة المعرفة",
     "laws": "مكتبة القوانين",
@@ -9,6 +10,27 @@
     "logout": "تسجيل الخروج",
     "language": "اللغة",
     "arabic": "العربية",
-    "french": "Français"
+    "french": "Français",
+    "calendar": "التقويم الضريبي",
+    "penalties": "حساب الغرامات",
+    "reminders": "التذكيرات",
+    "invoice_requests": "محطة الفواتير الذكية",
+    "invoice_generator": "صانع الفواتير",
+    "laws_library": "مكتبة القوانين",
+    "news": "الأخبار",
+    "contact_admin": "تواصل مع الإدارة",
+    "bot_title": "مساعد FinMap",
+    "chatbot_welcome": "مرحباً! أنا المساعد الذكي الخاص بك من FinMap. يمكنك سؤالي عن الجانب المالي و الجبائي و المحاسبي، أو إرفاق صور للفواتير، وسأجيبك فوراً. كما يمكنك التحدث معي صوتياً!",
+    "chatbot_placeholder": "اسألني أو أرفق فاتورة...",
+    "chatbot_listening": "جاري الاستماع...",
+    "chatbot_listen": "استماع",
+    "unsupported_browser": "متصفحك لا يدعم التعرف على الصوت",
+    "unsupported": "غير مدعوم",
+    "file_too_large": "حجم الملف كبير",
+    "file_too_large_desc": "يرجى اختيار ملف أقل من 5 ميغابايت",
+    "unsupported_file_type": "نوع غير مدعوم",
+    "unsupported_file_type_desc": "يرجى إرفاق صورة (JPG/PNG) أو ملف PDF",
+    "server_error_response": "عذراً، الخادم لا يستجيب بشكل صحيح.",
+    "connection_error": "عذراً، حدث خطأ في الاتصال. الخادم غير متاح حالياً."
   }
 }

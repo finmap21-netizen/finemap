@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { MessageCircle, X, Send, Loader2, Bot, Paperclip, FileText, Image as ImageIcon, Mic, Volume2, MicOff, VolumeX } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -13,10 +14,17 @@ declare global {
 }
 
 export function ChatBot() {
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<any[]>([
-    { role: 'model', parts: [{ text: "مرحباً! أنا المساعد الذكي الخاص بك من FinMap. يمكنك سؤالي عن الجانب المالي و الجبائي و المحاسبي، أو إرفاق صور للفواتير، وسأجيبك فوراً. كما يمكنك التحدث معي صوتياً!" }] }
-  ]);
+  const [messages, setMessages] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (messages.length === 0 || (messages.length === 1 && messages[0].role === 'model')) {
+      setMessages([
+        { role: 'model', parts: [{ text: t('chatbot_welcome') }] }
+      ]);
+    }
+  }, [t, i18n.language]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [attachedFile, setAttachedFile] = useState<{ name: string, type: string, data: string } | null>(null);
@@ -73,7 +81,7 @@ export function ChatBot() {
 
   const toggleRecording = () => {
     if (!recognitionRef.current) {
-      toast({ title: "غير مدعوم", description: "متصفحك لا يدعم التعرف على الصوت", variant: "destructive" });
+      toast({ title: t('unsupported'), description: t('unsupported_browser'), variant: "destructive" });
       return;
     }
 
@@ -121,13 +129,13 @@ export function ChatBot() {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast({ title: "حجم الملف كبير", description: "يرجى اختيار ملف أقل من 5 ميغابايت", variant: "destructive" });
+      toast({ title: t('file_too_large'), description: t('file_too_large_desc'), variant: "destructive" });
       return;
     }
 
     const validTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      toast({ title: "نوع غير مدعوم", description: "يرجى إرفاق صورة (JPG/PNG) أو ملف PDF", variant: "destructive" });
+      toast({ title: t('unsupported_file_type'), description: t('unsupported_file_type_desc'), variant: "destructive" });
       return;
     }
 
@@ -180,7 +188,7 @@ export function ChatBot() {
       try {
         data = JSON.parse(textResponse);
       } catch (e) {
-        setMessages([...newMessages, { role: "model", parts: [{ text: "عذراً، الخادم لا يستجيب بشكل صحيح." }] }]);
+        setMessages([...newMessages, { role: "model", parts: [{ text: t('server_error_response') }] }]);
         setIsLoading(false);
         return;
       }
@@ -193,7 +201,7 @@ export function ChatBot() {
         setMessages([...newMessages, { role: "model", parts: [{ text: data.reply || data.error || "عذراً، حدث خطأ أثناء الاتصال بالخادم." }] }]);
       }
     } catch (error) {
-      setMessages([...newMessages, { role: "model", parts: [{ text: "عذراً، حدث خطأ في الاتصال. الخادم غير متاح حالياً." }] }]);
+      setMessages([...newMessages, { role: "model", parts: [{ text: t('connection_error') }] }]);
     } finally {
       setIsLoading(false);
     }
@@ -213,7 +221,7 @@ export function ChatBot() {
           <div className="bg-primary p-3 flex justify-between items-center text-primary-foreground">
             <div className="flex items-center gap-2">
               <Bot size={24} />
-              <span className="font-bold">مساعد FinMap</span>
+              <span className="font-bold">{t('bot_title')}</span>
             </div>
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="icon" className={`text-primary-foreground ${autoSpeak ? 'bg-primary-foreground/20' : 'hover:bg-primary/80'}`} onClick={toggleAutoSpeak} title={autoSpeak ? "إيقاف الرد الصوتي" : "تفعيل الرد الصوتي"}>
@@ -242,7 +250,7 @@ export function ChatBot() {
                   </div>
                   {msg.role === 'model' && textContent && !autoSpeak && (
                     <button onClick={() => speakText(textContent)} className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors pr-2">
-                      <Volume2 size={12} /> استماع
+                      <Volume2 size={12} /> {t('chatbot_listen')}
                     </button>
                   )}
                 </div>
@@ -282,7 +290,7 @@ export function ChatBot() {
             
             <div className="flex-1 relative">
               <Input 
-                placeholder={isRecording ? "جاري الاستماع..." : "اسألني أو أرفق فاتورة..."} 
+                placeholder={isRecording ? t('chatbot_listening') : t('chatbot_placeholder')} 
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}

@@ -1,7 +1,8 @@
 {
   "translation": {
-    "app_title": "Assistant Fiscal",
+    "app_title": "Assistant Financier",
     "dashboard": "Tableau de Bord",
+    "admin_dashboard": "Tableau de Bord Admin",
     "invoices": "Factures",
     "knowledge": "Base de Connaissance",
     "laws": "Bibliothèque des Lois",
@@ -9,6 +10,27 @@
     "logout": "Déconnexion",
     "language": "Langue",
     "arabic": "العربية",
-    "french": "Français"
+    "french": "Français",
+    "calendar": "Calendrier Fiscal",
+    "penalties": "Calcul des Pénalités",
+    "reminders": "Rappels",
+    "invoice_requests": "Station Factures Intelligentes",
+    "invoice_generator": "Générateur de Factures",
+    "laws_library": "Bibliothèque des Lois",
+    "news": "Actualités",
+    "contact_admin": "Contacter l'Administration",
+    "bot_title": "Assistant FinMap",
+    "chatbot_welcome": "Bonjour ! Je suis votre assistant intelligent de FinMap. Vous pouvez me poser des questions sur les aspects financiers, fiscaux et comptables, ou joindre des photos de factures, et je vous répondrai immédiatement. Vous pouvez également me parler vocalement !",
+    "chatbot_placeholder": "Posez-moi une question ou joignez une facture...",
+    "chatbot_listening": "Écoute en cours...",
+    "chatbot_listen": "Écouter",
+    "unsupported_browser": "Votre navigateur ne prend pas en charge la reconnaissance vocale",
+    "unsupported": "Non supporté",
+    "file_too_large": "Fichier trop volumineux",
+    "file_too_large_desc": "Veuillez choisir un fichier de moins de 5 Mo",
+    "unsupported_file_type": "Type non supporté",
+    "unsupported_file_type_desc": "Veuillez joindre une image (JPG/PNG) ou un fichier PDF",
+    "server_error_response": "Désolé, le serveur ne répond pas correctement.",
+    "connection_error": "Désolé, une erreur de connexion est survenue. Le serveur est actuellement indisponible."
   }
 }
