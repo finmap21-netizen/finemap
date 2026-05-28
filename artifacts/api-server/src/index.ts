@@ -14,12 +14,20 @@ const possiblePaths = [
   path.resolve(__dirname, "../../.env")
 ];
 
+console.log("[dotenv-debug] Current Working Directory:", process.cwd());
+console.log("[dotenv-debug] __dirname:", __dirname);
+
 for (const p of possiblePaths) {
-  if (fs.existsSync(p)) {
-    dotenv.config({ path: p });
+  const exists = fs.existsSync(p);
+  console.log(`[dotenv-debug] Checking path "${p}" -> exists: ${exists}`);
+  if (exists) {
+    const result = dotenv.config({ path: p });
+    console.log(`[dotenv-debug] Loaded config from "${p}". Error:`, result.error || "none");
     break;
   }
 }
+
+console.log("[dotenv-debug] GEMINI_API_KEY loaded:", process.env.GEMINI_API_KEY ? "Yes (Starts with: " + process.env.GEMINI_API_KEY.substring(0, 5) + "...)" : "No");
 
 
 import app from "./app";
