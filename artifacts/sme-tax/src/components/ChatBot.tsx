@@ -15,7 +15,7 @@ declare global {
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<any[]>([
-    { role: 'model', parts: [{ text: "مرحباً! أنا المساعد الذكي الخاص بك من FinMap. يمكنك سؤالي عن الضرائب، أو إرفاق صور للفواتير، وسأجيبك فوراً. كما يمكنك التحدث معي صوتياً!" }] }
+    { role: 'model', parts: [{ text: "مرحباً! أنا المساعد الذكي الخاص بك من FinMap. يمكنك سؤالي عن الجانب المالي و الجبائي و المحاسبي، أو إرفاق صور للفواتير، وسأجيبك فوراً. كما يمكنك التحدث معي صوتياً!" }] }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
