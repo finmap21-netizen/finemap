@@ -22,7 +22,6 @@ import ContactAdmin from "@/pages/ContactAdmin";
 import LawsLibrary from "@/pages/LawsLibrary";
 import { ChatBot } from "@/components/ChatBot";
 import { OnboardingModal } from "@/components/OnboardingModal";
-import { FinancialTips } from "@/components/FinancialTips";
 import { isAuthenticated } from "@/lib/auth";
 
 import InvoiceGenerator from "@/pages/InvoiceGenerator";
@@ -66,7 +65,6 @@ function Router() {
         <>
           <ChatBot />
           <OnboardingModal />
-          <FinancialTips />
         </>
       )}
     </Layout>
