@@ -34,7 +34,7 @@ export default function Login() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl text-primary">تسجيل الدخول</CardTitle>
-          <CardDescription>مرحباً بك في مساعد الضرائب الجزائري</CardDescription>
+          <CardDescription>مرحباً بك في مساعد مالي</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
