@@ -34,7 +34,6 @@ export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         { href: "/invoice-requests", labelKey: "invoice_requests", icon: FileText },
         { href: "/invoice-generator", labelKey: "invoice_generator", icon: FileText },
         { href: "/knowledge", labelKey: "knowledge", icon: BookOpen },
-        { href: "/laws-library", labelKey: "laws_library", icon: BookOpen },
         { href: "/news", labelKey: "news", icon: Newspaper },
         { href: "/contact-admin", labelKey: "contact_admin", icon: MessageSquare },
         { href: "/profile", labelKey: "profile", icon: UserCircle },

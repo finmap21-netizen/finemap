@@ -6,7 +6,6 @@ import { useLocation } from "wouter";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { DailyNotification } from "./DailyNotification";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location, setLocation] = useLocation();
@@ -66,9 +65,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <h2 className="md:hidden text-xl font-bold text-sidebar-primary">خريطة المالية</h2>
           
           <div className="flex items-center gap-2">
-            <DailyNotification />
-
-          <Sheet open={open} onOpenChange={setOpen}>
+            <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:bg-sidebar-accent/50">
                 <Menu size={24} />

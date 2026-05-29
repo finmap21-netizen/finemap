@@ -19,7 +19,6 @@ import Profile from "@/pages/Profile";
 import Admin from "@/pages/Admin";
 import InvoiceRequests from "@/pages/InvoiceRequests";
 import ContactAdmin from "@/pages/ContactAdmin";
-import LawsLibrary from "@/pages/LawsLibrary";
 import { ChatBot } from "@/components/ChatBot";
 import { OnboardingModal } from "@/components/OnboardingModal";
 import { isAuthenticated } from "@/lib/auth";
@@ -57,7 +56,6 @@ function Router() {
         <Route path="/invoice-requests" component={InvoiceRequests} />
         <Route path="/invoice-generator" component={InvoiceGenerator} />
         <Route path="/contact-admin" component={ContactAdmin} />
-        <Route path="/laws-library" component={LawsLibrary} />
         <Route component={NotFound} />
       </Switch>
 
