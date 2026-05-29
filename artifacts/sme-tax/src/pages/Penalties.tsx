@@ -67,11 +67,21 @@ export default function Penalties() {
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="G50">G50</SelectItem>
+                      <SelectItem value="G50 ( TVA - IRG salaires - Droit timbre)">G50 ( TVA - IRG salaires - Droit timbre)</SelectItem>
+                      <SelectItem value="G50 (TVA - IRG salaires)">G50 (TVA - IRG salaires)</SelectItem>
+                      <SelectItem value="G50 Ter">G50 Ter</SelectItem>
                       <SelectItem value="G12">G12</SelectItem>
-                      <SelectItem value="G12BIS">G12 BIS</SelectItem>
-                      <SelectItem value="CNAS">CNAS</SelectItem>
-                      <SelectItem value="IBS">IBS</SelectItem>
-                      <SelectItem value="IRG">IRG</SelectItem>
+                      <SelectItem value="G12 BIS">G12 BIS</SelectItem>
+                      <SelectItem value="G13">G13</SelectItem>
+                      <SelectItem value="G8">G8</SelectItem>
+                      <SelectItem value="G29">G29</SelectItem>
+                      <SelectItem value="G4">G4</SelectItem>
+                      <SelectItem value="G17">G17</SelectItem>
+                      <SelectItem value="G11">G11</SelectItem>
+                      <SelectItem value="G3">G3</SelectItem>
+                      <SelectItem value="ETAT 104">ETAT 104</SelectItem>
+                      <SelectItem value="Déclaration CNAS /CACOBATPH">Déclaration CNAS /CACOBATPH</SelectItem>
+                      <SelectItem value="IRG BNC">IRG BNC</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

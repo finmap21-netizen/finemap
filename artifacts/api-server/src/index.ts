@@ -21,7 +21,7 @@ for (const p of possiblePaths) {
   const exists = fs.existsSync(p);
   console.log(`[dotenv-debug] Checking path "${p}" -> exists: ${exists}`);
   if (exists) {
-    const result = dotenv.config({ path: p });
+    const result = dotenv.config({ path: p, override: true });
     console.log(`[dotenv-debug] Loaded config from "${p}". Error:`, result.error || "none");
     break;
   }

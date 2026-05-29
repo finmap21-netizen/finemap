@@ -232,11 +232,22 @@ export function calculatePenalty(params: {
 
   switch (declarationType) {
     case "G50":
+    case "G50 ( TVA - IRG salaires - Droit timbre)":
+    case "G50 (TVA - IRG salaires)":
+    case "G50 Ter":
+    case "G17":
+    case "G11":
+    case "G3":
+    case "G8":
+    case "G29":
+    case "ETAT 104":
+    case "IRG BNC":
       return calculateG50Penalty(dueDate, paymentDate, taxAmount, hasPaymentRights);
     case "G12":
       return calculateG12Penalty(dueDate, paymentDate, taxAmount, "G12", hasPaymentRights);
-    case "G12BIS":
+    case "G12 BIS":
       return calculateG12Penalty(dueDate, paymentDate, taxAmount, "G12BIS", hasPaymentRights);
+    case "Déclaration CNAS /CACOBATPH":
     case "CNAS":
       return calculateCNASPenalty(dueDate, paymentDate, taxAmount);
     case "IBS":
