@@ -45,4 +45,19 @@ router.patch("/rules/:id", requireAdmin, async (req, res): Promise<void> => {
   res.json({ ...rule, createdAt: rule.createdAt.toISOString(), updatedAt: rule.updatedAt.toISOString() });
 });
 
+router.post("/rules", requireAdmin, async (req, res): Promise<void> => {
+  try {
+    const { insertTaxRuleSchema } = await import("@workspace/db");
+    const parsed = insertTaxRuleSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.message });
+      return;
+    }
+    const [rule] = await db.insert(taxRulesTable).values(parsed.data).returning();
+    res.json({ ...rule, createdAt: rule.createdAt.toISOString(), updatedAt: rule.updatedAt.toISOString() });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || "حدث خطأ داخلي" });
+  }
+});
+
 export default router;

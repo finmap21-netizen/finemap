@@ -20,6 +20,7 @@ import {
   getListNewsQueryKey,
   getListKnowledgeItemsQueryKey,
   getListAdminInvoiceRequestsQueryKey,
+  getListRulesQueryKey,
 } from "@workspace/api-client-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -562,10 +563,58 @@ function InvoiceRequestsTab() {
 
 function RulesTab() {
   const { data: rules, isLoading } = useListRules();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [editItem, setEditItem] = useState<{ regime: string; declarationType: string; legalDeadlineDescription: string; legalDeadlineDescriptionAr: string; penaltySchedule: string; fixedFine?: number } | null>(null);
+
+  const emptyForm = {
+    regime: "real",
+    declarationType: "",
+    legalDeadlineDescription: "",
+    legalDeadlineDescriptionAr: "",
+    penaltySchedule: "[]",
+    fixedFine: undefined
+  };
+
+  const createRule = useMutation({
+    mutationFn: async (data: typeof emptyForm) => {
+      const res = await fetch("/api/rules", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("auth_token")}`
+        },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error("Failed to create rule");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: getListRulesQueryKey() });
+      toast({ title: "تمت الإضافة", description: "تمت إضافة القاعدة الضريبية بنجاح" });
+      setEditItem(null);
+    },
+    onError: () => {
+      toast({ title: "خطأ", description: "تعذر إضافة القاعدة الضريبية", variant: "destructive" });
+    }
+  });
+
+  const handleSave = () => {
+    if (!editItem?.declarationType || !editItem?.legalDeadlineDescriptionAr) {
+      toast({ title: "تنبيه", description: "يرجى ملء الحقول المطلوبة", variant: "destructive" });
+      return;
+    }
+    createRule.mutate(editItem as any);
+  };
+
   if (isLoading) return <div className="text-muted-foreground py-8 text-center">جاري التحميل...</div>;
   return (
-    <Card>
-      <CardHeader><CardTitle>القواعد الضريبية للنظام</CardTitle></CardHeader>
+    <>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>القواعد الضريبية للنظام ({rules?.length || 0})</CardTitle>
+          <Button size="sm" onClick={() => setEditItem({ ...emptyForm })} className="gap-1"><Plus size={14} />إضافة قاعدة</Button>
+        </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
@@ -591,6 +640,54 @@ function RulesTab() {
         </Table>
       </CardContent>
     </Card>
+
+    <Dialog open={!!editItem} onOpenChange={(v) => !v && setEditItem(null)}>
+      <DialogContent dir="rtl" className="max-w-lg">
+        <DialogHeader><DialogTitle>إضافة قاعدة ضريبية جديدة</DialogTitle></DialogHeader>
+        {editItem && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label>النظام الجبائي *</Label>
+                <Select value={editItem.regime} onValueChange={v => setEditItem(x => x && { ...x, regime: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="real">النظام الحقيقي</SelectItem>
+                    <SelectItem value="simplified_real">النظام الحقيقي المبسط</SelectItem>
+                    <SelectItem value="forfaitaire">النظام الجزافي</SelectItem>
+                    <SelectItem value="all">الكل</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>نوع التصريح * (مثال: G50)</Label>
+                <Input value={editItem.declarationType} onChange={e => setEditItem(x => x && { ...x, declarationType: e.target.value })} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>المهلة القانونية (عربي) *</Label>
+              <Input value={editItem.legalDeadlineDescriptionAr} onChange={e => setEditItem(x => x && { ...x, legalDeadlineDescriptionAr: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label>المهلة القانونية (فرنسي)</Label>
+              <Input value={editItem.legalDeadlineDescription} onChange={e => setEditItem(x => x && { ...x, legalDeadlineDescription: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label>الغرامة الثابتة (د.ج)</Label>
+              <Input type="number" value={editItem.fixedFine || ""} onChange={e => setEditItem(x => x && { ...x, fixedFine: e.target.value ? Number(e.target.value) : undefined })} />
+            </div>
+          </div>
+        )}
+        <DialogFooter className="flex-row-reverse gap-2">
+          <Button onClick={handleSave} disabled={createRule.isPending}>
+            {createRule.isPending ? <Loader2 size={14} className="animate-spin ml-2" /> : null}
+            حفظ
+          </Button>
+          <Button variant="outline" onClick={() => setEditItem(null)}>إلغاء</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
 
